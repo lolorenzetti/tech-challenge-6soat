@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal class Produto
+    public class Produto
     {
-        public Produto(int id, string nome, string descricao, CategoriaProduto categoria, decimal valor)
+        public Produto(int id, string nome, string descricao, CategoriaProduto categoria, decimal preco)
         {
             Id = id;
             Nome = nome;
             Descricao = descricao;
             Categoria = categoria;
-            Valor = valor;
+            Preco = preco;
         }
 
-        public int Id { get; }
-        public string Nome { get; } = string.Empty;
-        public string Descricao { get; } = string.Empty;
-        public CategoriaProduto Categoria { get; }
-        public decimal Valor { get; }
+        public int Id { get; private set; }
+        public string Nome { get; private set; } = string.Empty;
+        public string Descricao { get; private set; } = string.Empty;
+        public CategoriaProduto Categoria { get; private set; }
+        public decimal Preco { get; private set; }
     }
 }

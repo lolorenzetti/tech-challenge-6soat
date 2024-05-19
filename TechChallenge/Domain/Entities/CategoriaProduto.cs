@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal enum CategoriaProduto
+    public enum CategoriaProduto
     {
         LANCHE,
         ACOMPANHAMENTO,
