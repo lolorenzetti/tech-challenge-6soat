@@ -5,7 +5,7 @@ using Domain.Ports;
 
 namespace Application.Services
 {
-    internal class ProdutoService
+    public class ProdutoService
     {
         private readonly IProdutoRepository _produtoRepository;
 
@@ -26,7 +26,29 @@ namespace Application.Services
                 {
                     Id = p.Id,
                     Nome = p.Nome,
-                    Categoria = nameof(p.Categoria),
+                    Descricao = p.Descricao,
+                    Categoria = p.Categoria.ToText(),
+                    Preco = p.Preco
+                });
+            };
+
+            return result;
+        }
+
+        public ListProdutoViewModel ObterPorCategoria(int categoria)
+        {
+            ListProdutoViewModel result = new();
+
+            var produtos = _produtoRepository.ObterPorCategoria((CategoriaProduto)categoria);
+
+            foreach (var p in produtos)
+            {
+                result.Produtos.Add(new ProdutoViewModel()
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    Descricao = p.Descricao,
+                    Categoria = p.Categoria.ToText(),
                     Preco = p.Preco
                 });
             };
@@ -37,39 +59,59 @@ namespace Application.Services
         public ProdutoViewModel ObterPorId(int id)
         {
             var produto = _produtoRepository.ObterPorId(id);
+
             return new ProdutoViewModel
             {
                 Id = produto.Id,
                 Nome = produto.Nome,
-                Categoria = nameof(produto.Categoria),
+                Descricao = produto.Descricao,
+                Categoria = produto.Categoria.ToText(),
                 Preco = produto.Preco
             };
         }
 
-        public void Adicionar(ProdutoInputModel produtoViewModel)
+        public ProdutoViewModel Adicionar(ProdutoInputModel produtoInputModel)
         {
             var produto = new Produto(
-                produtoViewModel.Id, 
-                produtoViewModel.Nome, 
-                produtoViewModel.Descricao, 
-                (CategoriaProduto) produtoViewModel.Categoria,
-                produtoViewModel.Preco
+                produtoInputModel.Nome,
+                produtoInputModel.Descricao,
+                produtoInputModel.Categoria.ToCategoriaProduto(),
+                produtoInputModel.Preco
              );
 
-            _produtoRepository.Adicionar(produto);
+            var created = _produtoRepository.Adicionar(produto);
+
+            return new ProdutoViewModel()
+            {
+                Id = created.Id,
+                Nome = created.Nome,
+                Descricao = created.Descricao,
+                Categoria = produto.Categoria.ToText(),
+                Preco = produto.Preco
+            };
         }
 
-        public void Atualizar(ProdutoInputModel produtoViewModel)
+        public ProdutoViewModel Atualizar(UpdateProdutoInputModel produtoInputModel)
         {
-            var produto = new Produto(
-                produtoViewModel.Id,
-                produtoViewModel.Nome,
-                produtoViewModel.Descricao,
-                (CategoriaProduto)produtoViewModel.Categoria,
-                produtoViewModel.Preco
+            var produto = _produtoRepository.ObterPorId(produtoInputModel.Id);
+
+            produto.Atualiza(
+                produtoInputModel.Nome,
+                produtoInputModel.Descricao,
+                produtoInputModel.Categoria?.ToCategoriaProduto(),
+                produtoInputModel.Preco
              );
 
             _produtoRepository.Atualizar(produto);
+
+            return new ProdutoViewModel()
+            {
+                Id = produto.Id,
+                Nome = produto.Nome,
+                Descricao = produto.Descricao,
+                Categoria = produto.Categoria.ToText(),
+                Preco = produto.Preco
+            };
         }
 
         public void Deletar(int id)
