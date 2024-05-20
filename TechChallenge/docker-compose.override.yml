@@ -1,16 +1,22 @@
 version: '3.4'
 
+networks:
+  tech-challenge-net:
+    driver: bridge
+
+
 services:
   api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - "80"
-      - "443"
+      - "8101:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - tech-challenge-net
   
   db:
     environment:
@@ -24,3 +30,5 @@ services:
       - '3306'
     volumes:
       - './mysql-data/db:/var/lib/mysql'  
+    networks:
+      - tech-challenge-net
