@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Tech challenge",
-        Description = "Desafio técnico FIAP",
+        Description = "Desafio tï¿½cnico FIAP",
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -47,4 +47,11 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    dbContext.Database.Migrate();
+}
+
 app.Run();
