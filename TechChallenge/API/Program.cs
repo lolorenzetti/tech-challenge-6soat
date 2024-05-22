@@ -1,3 +1,5 @@
+using API.Filters;
+using Application;
 using Application.Services;
 using Domain.Ports;
 using Infra.Data;
@@ -9,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("app-database");
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<NotificationFilter>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -29,6 +35,7 @@ builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<ClienteService>();
+builder.Services.AddApplication();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));

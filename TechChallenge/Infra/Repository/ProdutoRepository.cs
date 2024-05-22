@@ -17,12 +17,12 @@ namespace Infra.Data.Repository
             _context = context;
         }
 
-        public Produto Adicionar(Produto produto)
+        public async Task<int> Adicionar(Produto produto)
         {
-            var newProduto = _context.Produtos.Add(produto);
+            var newProduto = await _context.Produtos.AddAsync(produto);
             _context.SaveChanges();
 
-            return newProduto.Entity;
+            return newProduto.Entity.Id;
         }
 
         public void Atualizar(Produto produto)

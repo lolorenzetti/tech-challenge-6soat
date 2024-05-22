@@ -1,6 +1,8 @@
-﻿using Application.Models.InputModel;
+﻿using Application.Features.ProdutoContext;
+using Application.Models.InputModel;
 using Application.Models.ViewModel;
 using Application.Services;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
@@ -11,10 +13,12 @@ namespace API.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private ProdutoService _produtoService;
 
-        public ProdutoController(ProdutoService produtoService)
+        public ProdutoController(IMediator mediator, ProdutoService produtoService)
         {
+            _mediator = mediator;
             _produtoService = produtoService;
         }
 
@@ -77,10 +81,10 @@ namespace API.Controllers
         /// <response code="201">Cadastrado com sucesso</response>
         /// <response code="500">Erro interno no servidor</response>
         [HttpPost]
-        public ActionResult Adicionar(ProdutoInputModel produto)
+        public async Task<IActionResult> Adicionar([FromBody] CreateProduto command)
         {
-            var created = _produtoService.Adicionar(produto);
-            return Created("/produtos", created);
+            var id = await _mediator.Send(command);
+            return Created($"api/produtos/{id}", id);
         }
 
         /// <summary>

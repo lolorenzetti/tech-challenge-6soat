@@ -8,6 +8,10 @@ namespace Infra.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Produto> builder)
         {
+            builder.Ignore(p => p.ValidationResult);
+            builder.Ignore(p => p.Invalid);
+            builder.Ignore(p => p.Valid);
+
             builder.HasKey(p => p.Id);
 
             builder.Property(c => c.Nome)

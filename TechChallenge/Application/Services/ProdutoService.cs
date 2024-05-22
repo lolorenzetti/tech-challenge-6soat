@@ -70,7 +70,7 @@ namespace Application.Services
             };
         }
 
-        public ProdutoViewModel Adicionar(ProdutoInputModel produtoInputModel)
+        public async Task<int> Adicionar(ProdutoInputModel produtoInputModel)
         {
             var produto = new Produto(
                 produtoInputModel.Nome,
@@ -79,16 +79,9 @@ namespace Application.Services
                 produtoInputModel.Preco
              );
 
-            var created = _produtoRepository.Adicionar(produto);
+            int createdId = await _produtoRepository.Adicionar(produto);
 
-            return new ProdutoViewModel()
-            {
-                Id = created.Id,
-                Nome = created.Nome,
-                Descricao = created.Descricao,
-                Categoria = produto.Categoria.ToText(),
-                Preco = produto.Preco
-            };
+            return createdId;
         }
 
         public ProdutoViewModel Atualizar(UpdateProdutoInputModel produtoInputModel)
