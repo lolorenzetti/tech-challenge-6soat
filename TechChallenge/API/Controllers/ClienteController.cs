@@ -1,6 +1,7 @@
-﻿using Application.Models.InputModel;
+﻿using Application.Features.ClienteContext;
+using Application.Models.InputModel;
 using Application.Models.ViewModel;
-using Application.Services;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,28 +11,27 @@ namespace API.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
+        private IMediator _mediator;
 
-        private ClienteService _clienteService;
-
-        public ClienteController(ClienteService clienteService)
+        public ClienteController(IMediator mediator)
         {
-            _clienteService = clienteService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("{cpf}")]
-        public ActionResult<ClienteViewModel> buscarPorCpf([FromRoute] string cpf)
+        public async Task<IActionResult> BuscarPorCpf([FromRoute] string cpf)
         {
-            return Ok(_clienteService.buscarCliente(cpf));
+            RequestClienteByCpf command = new() { Cpf = cpf };
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPost]
-        public ActionResult<ClienteViewModel> cadastrarCliente(ClienteInputModel clienteInputModel)
+        public async Task<IActionResult> CadastrarCliente(CreateCliente command)
         {
-            return Created("/clientes", _clienteService.cadastrarCliente(clienteInputModel));
+            var result = await _mediator.Send(command);
+            return Created("/clientes", result);
         }
-
-      
-
     }
 }

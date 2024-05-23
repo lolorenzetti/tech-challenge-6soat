@@ -1,7 +1,4 @@
 ﻿using Application.Features.ProdutoContext;
-using Application.Models.InputModel;
-using Application.Models.ViewModel;
-using Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

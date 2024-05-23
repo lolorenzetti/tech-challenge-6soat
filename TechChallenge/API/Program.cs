@@ -1,6 +1,5 @@
 using API.Filters;
 using Application;
-using Application.Services;
 using Domain.Ports;
 using Infra.Data;
 using Infra.Data.Repository;
@@ -8,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = builder.Configuration.GetConnectionString("app-database");
 
 builder.Services.AddControllers(options =>
 {
@@ -31,13 +28,12 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<ClienteService>();
+builder.Services.AddInfraData();
 builder.Services.AddApplication();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
+    var connectionString = builder.Configuration.GetConnectionString("app-database");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
@@ -53,7 +49,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
