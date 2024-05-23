@@ -5,11 +5,11 @@ namespace Domain.Ports
 {
     public interface IProdutoRepository
     {
-        IEnumerable<Produto> ObterTodos();
-        IEnumerable<Produto> ObterPorCategoria(CategoriaProduto categoria);
-        Produto ObterPorId(int id);
+        Task<IEnumerable<Produto>> ObterTodos();
+        Task<IEnumerable<Produto>> ObterPorCategoria(CategoriaProduto categoria);
+        Task<Produto> ObterPorId(int id);
         Task<int> Adicionar(Produto produto);
-        void Atualizar(Produto produto);
-        void Deletar(int id);
+        Task Atualizar(Produto produto);
+        Task Deletar(int id);
     }
 }

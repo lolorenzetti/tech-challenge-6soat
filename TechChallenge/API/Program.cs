@@ -33,7 +33,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddApplication();
 builder.Services.AddDbContext<DatabaseContext>(options =>

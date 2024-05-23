@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,38 +26,38 @@ namespace Infra.Data.Repository
             return newProduto.Entity.Id;
         }
 
-        public void Atualizar(Produto produto)
+        public async Task Atualizar(Produto produto)
         {
             _context.Produtos.Update(produto);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Deletar(int id)
+        public async Task Deletar(int id)
         {
-            var produto = _context.Produtos.First(p => p.Id == id);
+            var produto = await _context.Produtos.FirstAsync(p => p.Id == id);
 
             if (produto != null)
             {
                 _context.Produtos.Remove(produto);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
-        public IEnumerable<Produto> ObterPorCategoria(CategoriaProduto categoria)
+        public async Task<IEnumerable<Produto>> ObterPorCategoria(CategoriaProduto categoria)
         {
-            return _context.Produtos
+            return await _context.Produtos
                 .Where(s => s.Categoria == categoria)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Produto ObterPorId(int id)
+        public Task<Produto> ObterPorId(int id)
         {
-            return _context.Produtos.First(s => s.Id == id);
+            return Task.FromResult(_context.Produtos.First(s => s.Id == id));
         }
 
-        public IEnumerable<Produto> ObterTodos()
+        public async Task<IEnumerable<Produto>> ObterTodos()
         {
-            return _context.Produtos.ToList();
+            return await _context.Produtos.ToListAsync();
         }
     }
 }

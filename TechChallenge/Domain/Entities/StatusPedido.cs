@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal enum StatusPedido
+    public enum StatusPedido
     {
+        PENDENTE_PAGAMENTO,
+        CANCELADO,
         RECEBIDO,
         EM_PREPARACAO,
         PRONTO,

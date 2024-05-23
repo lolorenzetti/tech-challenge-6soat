@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Features.ProdutoContext
 {
-    public record CreateProduto : IRequest<int>
+    public class UpdateProduto : IRequest
     {
+        public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Descricao { get; set; } = string.Empty;
         public int Categoria { get; set; }
