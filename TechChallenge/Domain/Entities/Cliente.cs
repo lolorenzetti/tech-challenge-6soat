@@ -29,7 +29,7 @@ namespace Domain.Entities
         public ClienteValidator()
         {
             RuleFor(e => e.Cpf)
-                .Matches(new Regex("^[0-9]{3}.?[0-9]{3}.?[0-9]{3}-?[0-9]{2}"))
+                .Matches(new Regex("^[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{2}"))
                 .WithMessage("CPF inválido");
 
             RuleFor(e => e.Nome)

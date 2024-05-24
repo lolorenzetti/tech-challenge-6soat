@@ -17,15 +17,10 @@ namespace Domain.Entities
             Validate(this, new PedidoItemValidator());
         }
 
-        public int PedidoId { get; private set; } // Referência ao agregado root
+        public int PedidoId { get; private set; } // Referência ao agregado root (Pedido)
         public int ProdutoId { get; private set; } // Referência ao agregado Produto
         public int Quantidade { get; private set; }
         public decimal Preco { get; private set; }
-
-        public void voidAdicionaItemNoPedido(int id)
-        {
-            PedidoId = id;
-        }
 
         public void AdicionarQuantidade(int qtd)
         {
