@@ -1,5 +1,6 @@
 ﻿using Application.Notifications;
 using Domain.Entities;
+using Domain.Enuns;
 using Domain.Ports;
 using MediatR;
 using System;

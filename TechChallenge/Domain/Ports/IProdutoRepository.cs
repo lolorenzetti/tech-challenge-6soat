@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enuns;
 using System.Collections.Generic;
 
 namespace Domain.Ports

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enuns;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
 using System;
