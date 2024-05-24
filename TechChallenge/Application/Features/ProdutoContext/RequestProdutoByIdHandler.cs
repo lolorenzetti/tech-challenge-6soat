@@ -1,5 +1,6 @@
 ﻿using Application.Models.ViewModel;
 using Application.Notifications;
+using Domain.Entities;
 using Domain.Ports;
 using MediatR;
 using System;
@@ -22,16 +23,24 @@ namespace Application.Features.ProdutoContext
         }
         public async Task<ProdutoViewModel> Handle(RequestProdutoById request, CancellationToken cancellationToken)
         {
+            ProdutoViewModel result = new();
+
             var produto = await _produtoRepository.ObterPorId(request.Id);
 
-            return new ProdutoViewModel
+            if (produto is null)
             {
-                Id = produto.Id,
-                Nome = produto.Nome,
-                Descricao = produto.Descricao,
-                Categoria = produto.Categoria.ToText(),
-                Preco = produto.Preco
-            };
+                _notificationContext.AddNotification("NullReference", "Produto não encontrado ou inexistente");
+            }
+            else
+            {
+                result.Id = produto.Id;
+                result.Nome = produto.Nome;
+                result.Descricao = produto.Descricao;
+                result.Categoria = produto.Categoria.ToText();
+                result.Preco = produto.Preco;
+            }
+
+            return result;
         }
     }
 }

@@ -23,15 +23,23 @@ namespace Application.Features.ClienteContext
 
         public async Task<ClienteViewModel> Handle(RequestClienteByCpf request, CancellationToken cancellationToken)
         {
+            ClienteViewModel result = new();
+
             var cliente = await _clienteRepository.BuscarPorCpf(request.Cpf);
 
-            return new ClienteViewModel()
+            if (cliente is null)
             {
-                Id = cliente.Id,
-                Cpf = cliente.Cpf,
-                Email = cliente.Email,
-                Nome = cliente.Nome
-            };
+                _notificationContext.AddNotification("NullReference", "Cliente não encontrado ou inexistente");
+            }
+            else
+            {
+                result.Id = cliente.Id;
+                result.Cpf = cliente.Cpf;
+                result.Email = cliente.Email;
+                result.Nome = cliente.Nome;
+            }
+
+            return result;
         }
     }
 }

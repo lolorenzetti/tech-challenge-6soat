@@ -25,28 +25,34 @@ namespace Application.Features.PedidoContext
 
         public async Task<PedidoViewModel> Handle(ListaPedido request, CancellationToken cancellationToken)
         {
+            PedidoViewModel result = new();
+
             var pedido = await _pedidoRepository.ObterPorId(request.Id);
 
-            List<PedidoItemViewModel> itens = new();
-
-            foreach (var item in pedido.Itens)
+            if (pedido is null)
             {
-                var produto = await _produtoRepository.ObterPorId(item.ProdutoId);
-
-                itens.Add(new()
-                {
-                    Nome = produto.Nome,
-                    Preco = item.Preco,
-                    Quantidade = item.Quantidade
-                });
+                _notificationContext.AddNotification("NullReference", "Pedido não encontrado ou inexistente");
             }
-
-            PedidoViewModel result = new()
+            else
             {
-                Id = pedido.Id,
-                ValorTotal = pedido.CalculaValorTotal(),
-                Itens = itens
-            };
+                List<PedidoItemViewModel> itens = new();
+
+                foreach (var item in pedido.Itens)
+                {
+                    var produto = await _produtoRepository.ObterPorId(item.ProdutoId);
+
+                    itens.Add(new()
+                    {
+                        Nome = produto!.Nome,
+                        Preco = item.Preco,
+                        Quantidade = item.Quantidade
+                    });
+                }
+
+                result.Id = pedido.Id;
+                result.ValorTotal = pedido.CalculaValorTotal();
+                result.Itens = itens;
+            }
 
             return result;
         }

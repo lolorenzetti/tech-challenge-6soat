@@ -23,12 +23,23 @@ namespace Application.Features.ProdutoContext
 
         public async Task<int> Handle(CreateProduto request, CancellationToken cancellationToken)
         {
+            CategoriaProduto categoria;
+
+            if (!Enum.TryParse<CategoriaProduto>(request.Categoria.ToString(), out categoria))
+            {
+                _notificationContext.AddNotification("NullReference",
+                    $"Categoria com identificador {request.Categoria} produto inválida");
+
+                return -1;
+            }
+
             var produto = new Produto(
                 request.Nome,
                 request.Descricao,
-                request.Categoria.ToCategoriaProduto(),
+                categoria,
                 request.Preco
             );
+
 
             if (produto.Invalid)
             {

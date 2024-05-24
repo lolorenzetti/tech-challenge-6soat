@@ -25,6 +25,8 @@ namespace API.Controllers
         /// </remarks>
         /// <param name="id">Id do produto a ser buscado</param>
         /// <response code="200">Sucesso</response>
+        /// <response code="400">Não encontrado ou inexistente</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> ObterPorId([FromRoute] int id)
@@ -44,6 +46,7 @@ namespace API.Controllers
         /// <example>/api/produto/categoria/1</example>
         /// <returns>Todos os produtos da categoria informada</returns>
         /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpGet]
         [Route("categoria/{id}")]
         public async Task<IActionResult> ObterPorCategoria([FromRoute] int id)
@@ -59,7 +62,6 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Adiciona um novo produto. Exemplo:
         ///   {
-        ///     "id": 1,
         ///     "nome": "X-Tudo",
         ///     "descricao": "Tudo o que tiver na cozinha",
         ///     "categoria": 0,
@@ -68,7 +70,8 @@ namespace API.Controllers
         /// </remarks>
         /// <param name="command"></param>
         /// <response code="201">Cadastrado com sucesso</response>
-        /// <response code="500">Erro interno no servidor</response>
+        /// <response code="400">Erros de validação</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpPost]
         public async Task<IActionResult> Adicionar([FromBody] CreateProduto command)
         {
@@ -81,7 +84,8 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Deleta o produto com o id informado na rota</remarks>
         /// <param name="id">id do produto a ser deletado</param>
-        /// <response code="204">Deletado com sucesso</response>
+        /// <response code="204">Sucesso</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Deletar([FromRoute] int id)
@@ -96,7 +100,9 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Atualiza um produto existente</remarks>
         /// <param name="command">dados do produto atualizado</param>
-        /// <response code="200">Produto atualizado com sucesso</response>
+        /// <response code="204">Sucesso</response>
+        /// <response code="400">Erro de validação</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpPut]
         public async Task<IActionResult> Atualizar(UpdateProduto command)
         {

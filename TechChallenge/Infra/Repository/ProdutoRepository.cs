@@ -50,9 +50,9 @@ namespace Infra.Data.Repository
                 .ToListAsync();
         }
 
-        public Task<Produto> ObterPorId(int id)
+        public async Task<Produto?> ObterPorId(int id)
         {
-            return Task.FromResult(_context.Produtos.First(s => s.Id == id));
+            return await _context.Produtos.FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<IEnumerable<Produto>> ObterTodos()

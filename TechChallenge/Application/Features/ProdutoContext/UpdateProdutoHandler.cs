@@ -26,7 +26,7 @@ namespace Application.Features.ProdutoContext
         {
             var produto = await _produtoRepository.ObterPorId(request.Id);
 
-            produto.Atualiza(
+            produto!.Atualiza(
                 request.Nome,
                 request.Descricao,
                 request.Categoria.ToCategoriaProduto(),

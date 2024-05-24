@@ -30,6 +30,14 @@ namespace Application.Features.PedidoContext
             foreach (var i in request.Itens)
             {
                 var produto = await _produtoRepository.ObterPorId(i.Id);
+
+                if (produto is null)
+                {
+                    _notificationContext.AddNotification("NullReference",
+                        $"Produto com identificador '{i.Id}' não encontrado");
+                    return -1;
+                }
+
                 var item = new PedidoItem(produto.Id, i.Quantidade, produto.Preco);
 
                 if (item.Invalid)

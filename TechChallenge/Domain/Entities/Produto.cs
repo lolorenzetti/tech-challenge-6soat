@@ -26,8 +26,8 @@ namespace Domain.Entities
 
         public void Atualiza(string? nome, string? descricao, CategoriaProduto? categoria, decimal? preco)
         {
-            this.Nome = nome ?? this.Nome;
-            this.Descricao = descricao ?? this.Descricao;
+            this.Nome = string.IsNullOrEmpty(nome) ? this.Nome : nome;
+            this.Descricao = string.IsNullOrEmpty(descricao) ? this.Descricao : descricao;
 
             if (categoria != null && categoria != this.Categoria)
             {
@@ -38,6 +38,8 @@ namespace Domain.Entities
             {
                 this.Preco = (decimal)preco;
             }
+
+            Validate(this, new ProdutoValidator());
         }
     }
 
@@ -49,6 +51,22 @@ namespace Domain.Entities
                 .NotEmpty()
                 .MinimumLength(3)
                 .WithMessage("Nome do produto deve ter tamanho mínimo de 3 caracteres");
+
+            RuleFor(p => p.Nome)
+                .MaximumLength(100)
+                .WithMessage("Nome deve ter no máximo 100 caracteres");
+
+            RuleFor(p => p.Preco)
+                .GreaterThan(0)
+                .WithMessage("Preço deve ser maior que zero");
+
+            RuleFor(p => p.Descricao)
+                .MaximumLength(255)
+                .WithMessage("Descrição deve ter no máximo 255 caracteres");
+
+            RuleFor(p => p.Categoria)
+                .IsInEnum()
+                .WithMessage("Categoria inválida ou inexistente");
         }
     }
 }

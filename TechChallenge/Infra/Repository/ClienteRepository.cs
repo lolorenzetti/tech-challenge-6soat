@@ -19,9 +19,9 @@ namespace Infra.Data.Repository
             _context = context;
         }
 
-        public async Task<Cliente> BuscarPorCpf(string cpf)
+        public async Task<Cliente?> BuscarPorCpf(string cpf)
         {
-            return await _context.Clientes.FirstAsync(c => c.Cpf == cpf);
+            return await _context.Clientes.FirstOrDefaultAsync(c => c.Cpf == cpf);
         }
 
         public async Task<Cliente> CadastrarCliente(Cliente cliente)

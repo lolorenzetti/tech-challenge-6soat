@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Tech challenge",
-        Description = "Desafio t�cnico FIAP",
+        Description = "Desafio tecnico FIAP",
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

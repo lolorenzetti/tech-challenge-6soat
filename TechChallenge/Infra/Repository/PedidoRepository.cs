@@ -38,12 +38,12 @@ namespace Infra.Data.Repository
             return await _context.Pedidos.ToListAsync();
         }
 
-        public async Task<Pedido> ObterPorId(int id)
+        public async Task<Pedido?> ObterPorId(int id)
         {
             return await _context.Pedidos
                 .Where(p => p.Id == id)
                 .Include(p => p.Itens)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
         }
     }
 }
