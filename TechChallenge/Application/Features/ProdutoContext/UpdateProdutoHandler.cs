@@ -1,5 +1,4 @@
-﻿using Application.Models.InputModel;
-using Application.Models.ViewModel;
+﻿using Application.Models.ViewModel;
 using Application.Notifications;
 using Domain.Ports;
 using MediatR;

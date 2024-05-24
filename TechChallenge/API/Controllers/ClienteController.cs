@@ -1,5 +1,4 @@
 ﻿using Application.Features.ClienteContext;
-using Application.Models.InputModel;
 using Application.Models.ViewModel;
 using MediatR;
 using Microsoft.AspNetCore.Http;
