@@ -49,7 +49,7 @@ cd first-tech-challenge/TechChallenge
 2. **Executar com Docker Compose**
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 Este comando irá construir as imagens e iniciar os contêineres definidos no arquivo `docker-compose.yml`.
