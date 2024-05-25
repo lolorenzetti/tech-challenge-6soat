@@ -7,8 +7,9 @@ services:
     build:
       context: .
       dockerfile: API/Dockerfile
+    restart: always
     depends_on:
-        - db
+      - db
 
   db:
     container_name: database
