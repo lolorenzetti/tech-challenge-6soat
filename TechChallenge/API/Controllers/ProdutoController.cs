@@ -1,6 +1,5 @@
-﻿using Application.Models.InputModel;
-using Application.Models.ViewModel;
-using Application.Services;
+﻿using Application.Features.ProdutoContext;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
@@ -11,22 +10,11 @@ namespace API.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
-        private ProdutoService _produtoService;
+        private readonly IMediator _mediator;
 
-        public ProdutoController(ProdutoService produtoService)
+        public ProdutoController(IMediator mediator)
         {
-            _produtoService = produtoService;
-        }
-
-        /// <summary>
-        /// Obter todos os produtos
-        /// </summary>
-        /// <returns>Retorna uma lista com todos os produtos</returns>
-        /// <response code="200">Sucesso</response>
-        [HttpGet]
-        public ActionResult<ListProdutoViewModel> ObterTodos()
-        {
-            return Ok(_produtoService.ObterTodos());
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -37,11 +25,15 @@ namespace API.Controllers
         /// </remarks>
         /// <param name="id">Id do produto a ser buscado</param>
         /// <response code="200">Sucesso</response>
+        /// <response code="400">Não encontrado ou inexistente</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<ListProdutoViewModel> ObterPorId([FromRoute] int id)
+        public async Task<IActionResult> ObterPorId([FromRoute] int id)
         {
-            return Ok(_produtoService.ObterPorId(id));
+            RequestProdutoById command = new() { Id = id };
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         /// <summary>
@@ -50,15 +42,19 @@ namespace API.Controllers
         /// <remarks>
         /// Categorias:  [0 "LANCHE", 1 "ACOMPANHAMENTO", 2 "BEBIDA", 3 "SOBREMESA"]
         /// </remarks>
-        /// <param name="categoria">Categoria em formato int</param>
+        /// <param name="id">Categoria em formato int</param>
         /// <example>/api/produto/categoria/1</example>
         /// <returns>Todos os produtos da categoria informada</returns>
         /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpGet]
-        [Route("categoria/{categoria}")]
-        public ActionResult<ListProdutoViewModel> ObterPorCategoria([FromRoute] int categoria)
+        [Route("categoria/{id}")]
+        public async Task<IActionResult> ObterPorCategoria([FromRoute] int id)
         {
-            return Ok(_produtoService.ObterPorCategoria(categoria));
+            RequestProdutoByCategoria command = new() { CategoriaId = id };
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -66,21 +62,21 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Adiciona um novo produto. Exemplo:
         ///   {
-        ///     "id": 1,
         ///     "nome": "X-Tudo",
         ///     "descricao": "Tudo o que tiver na cozinha",
         ///     "categoria": 0,
         ///     "preco": 27.50
         ///    }  
         /// </remarks>
-        /// <param name="produto"></param>
+        /// <param name="command"></param>
         /// <response code="201">Cadastrado com sucesso</response>
-        /// <response code="500">Erro interno no servidor</response>
+        /// <response code="400">Erros de validação</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpPost]
-        public ActionResult Adicionar(ProdutoInputModel produto)
+        public async Task<IActionResult> Adicionar([FromBody] CreateProduto command)
         {
-            var created = _produtoService.Adicionar(produto);
-            return Created("/produtos", created);
+            var id = await _mediator.Send(command);
+            return Created($"api/produtos/{id}", id);
         }
 
         /// <summary>
@@ -88,12 +84,14 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Deleta o produto com o id informado na rota</remarks>
         /// <param name="id">id do produto a ser deletado</param>
-        /// <response code="204">Deletado com sucesso</response>
+        /// <response code="204">Sucesso</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult Deletar([FromRoute] int id)
+        public async Task<IActionResult> Deletar([FromRoute] int id)
         {
-            _produtoService.Deletar(id);
+            DeleteProduto command = new() { Id = id };
+            await _mediator.Send(command);
             return NoContent();
         }
 
@@ -101,13 +99,15 @@ namespace API.Controllers
         /// Atualizar um produto
         /// </summary>
         /// <remarks>Atualiza um produto existente</remarks>
-        /// <param name="produto">dados do produto atualizado</param>
-        /// <response code="200">Produto atualizado com sucesso</response>
+        /// <param name="command">dados do produto atualizado</param>
+        /// <response code="204">Sucesso</response>
+        /// <response code="400">Erro de validação</response>
+        /// <response code="500">Erro no servidor</response>
         [HttpPut]
-        public ActionResult Atualizar(UpdateProdutoInputModel produto)
+        public async Task<IActionResult> Atualizar(UpdateProduto command)
         {
-            var updated = _produtoService.Atualizar(produto);
-            return Ok(updated);
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

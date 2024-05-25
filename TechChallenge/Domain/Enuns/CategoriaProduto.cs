@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Enuns
 {
-    internal enum StatusPedido
+    public enum CategoriaProduto
     {
-        RECEBIDO,
-        EM_PREPARACAO,
-        PRONTO,
-        FINALIZADO
+        LANCHE,
+        ACOMPANHAMENTO,
+        BEBIDA,
+        SOBREMESA
     }
 }

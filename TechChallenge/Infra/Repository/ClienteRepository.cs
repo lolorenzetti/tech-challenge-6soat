@@ -1,5 +1,6 @@
-﻿using Domain.Ports;
-using Domain.Entities;
+﻿using Domain.Entities;
+using Domain.Ports;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +19,22 @@ namespace Infra.Data.Repository
             _context = context;
         }
 
-        Cliente IClienteRepository.buscarPorCpf(string cpf)
+        public async Task<Cliente?> BuscarPorCpf(string cpf)
         {
-
-          return _context.Clientes.First(c => c.Cpf == cpf);
+            return await _context.Clientes.FirstOrDefaultAsync(c => c.Cpf == cpf);
         }
 
-        Cliente IClienteRepository.cadastrarCliente(Cliente cliente)
+        public async Task<Cliente?> BuscarPorId(int id)
         {
-            var entity = _context.Clientes.Add(cliente).Entity;
+            return await _context.Clientes.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Cliente> CadastrarCliente(Cliente cliente)
+        {
+            var entity = await _context.Clientes.AddAsync(cliente);
             _context.SaveChanges();
-            return entity;
+
+            return entity.Entity;
         }
     }
 }

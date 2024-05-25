@@ -9,10 +9,8 @@ namespace Domain.Ports
 {
     public interface IClienteRepository
     {
-
-        Cliente buscarPorCpf(string cpf);
-
-        Cliente cadastrarCliente(Cliente cliente);
-
+        Task<Cliente> CadastrarCliente(Cliente cliente);
+        Task<Cliente?> BuscarPorCpf(string cpf);
+        Task<Cliente?> BuscarPorId(int id);
     }
 }

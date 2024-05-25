@@ -1,4 +1,5 @@
-using Application.Services;
+using API.Filters;
+using Application;
 using Domain.Ports;
 using Infra.Data;
 using Infra.Data.Repository;
@@ -7,9 +8,11 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("app-database");
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<NotificationFilter>();
+});
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -17,7 +20,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Tech challenge",
-        Description = "Desafio t�cnico FIAP",
+        Description = "Desafio tecnico FIAP",
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -25,12 +28,12 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<ProdutoService>();
-builder.Services.AddScoped<ClienteService>();
+builder.Services.AddInfraData();
+builder.Services.AddApplication();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
+    var connectionString = builder.Configuration.GetConnectionString("app-database");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
@@ -46,7 +49,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 

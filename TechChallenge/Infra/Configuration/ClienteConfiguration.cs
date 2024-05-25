@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Infra.Data.Configuration
 {
-    internal class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
+    public class ClienteConfiguration : BaseEntityConfiguration<Cliente>
     {
-        public void Configure(EntityTypeBuilder<Cliente> builder)
+        public override void Configure(EntityTypeBuilder<Cliente> builder)
         {
-            builder.HasKey(p => p.Id);
+            base.Configure(builder);
 
             builder.Property(c => c.Nome)
                 .IsRequired()
@@ -26,7 +26,6 @@ namespace Infra.Data.Configuration
             builder.Property(c => c.Cpf)
                 .IsRequired()
                 .HasColumnType("char(11)");
-
         }
     }
 }

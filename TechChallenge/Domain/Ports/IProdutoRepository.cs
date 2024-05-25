@@ -1,15 +1,16 @@
 ﻿using Domain.Entities;
+using Domain.Enuns;
 using System.Collections.Generic;
 
 namespace Domain.Ports
 {
     public interface IProdutoRepository
     {
-        IEnumerable<Produto> ObterTodos();
-        IEnumerable<Produto> ObterPorCategoria(CategoriaProduto categoria);
-        Produto ObterPorId(int id);
-        Produto Adicionar(Produto produto);
-        void Atualizar(Produto produto);
-        void Deletar(int id);
+        Task<IEnumerable<Produto>> ObterTodos();
+        Task<IEnumerable<Produto>> ObterPorCategoria(CategoriaProduto categoria);
+        Task<Produto?> ObterPorId(int id);
+        Task<int> Adicionar(Produto produto);
+        Task Atualizar(Produto produto);
+        Task Deletar(int id);
     }
 }
