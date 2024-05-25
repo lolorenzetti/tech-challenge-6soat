@@ -21,6 +21,7 @@ namespace Infra.Data.Repository
         public void Atualiza(Pedido pedido)
         {
             _context.Pedidos.Update(pedido);
+            _context.SaveChanges();
         }
 
         public async Task<int> Cria(Pedido pedido)

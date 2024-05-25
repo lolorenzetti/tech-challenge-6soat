@@ -51,5 +51,25 @@ namespace API.Controllers
             var list = await _mediator.Send(command);
             return Ok(list);
         }
+
+        /// <summary>
+        /// Faz o checkout do pedido
+        /// </summary>
+        /// <remarks>
+        /// Faz o checkout do pedido, atualizando status para RECEBIDO
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>Pedido</returns>
+        /// <response code="200">Sucesso</response>
+        /// <response code="400">Erro de validação</response>
+        /// <response code="500">Erro interno</response>
+        [HttpPost]
+        [Route("{id}/checkout")]
+        public async Task<IActionResult> CheckoutPedido([FromRoute] int id)
+        {
+            var command = new CheckoutPedido(id);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }
