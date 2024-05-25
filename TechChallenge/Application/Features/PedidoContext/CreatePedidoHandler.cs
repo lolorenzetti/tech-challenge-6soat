@@ -1,4 +1,5 @@
-﻿using Application.Notifications;
+﻿using Application.Models.ViewModel;
+using Application.Notifications;
 using Domain.Entities;
 using Domain.Ports;
 using MediatR;
@@ -10,21 +11,24 @@ using System.Threading.Tasks;
 
 namespace Application.Features.PedidoContext
 {
-    public class CreatePedidoHandler : IRequestHandler<CreatePedido, int>
+    public class CreatePedidoHandler : IRequestHandler<CreatePedido, PedidoViewModel>
     {
         private readonly NotificationContext _notificationContext;
         private readonly IProdutoRepository _produtoRepository;
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly IClienteRepository _clienteRepository;
 
-        public CreatePedidoHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository, IPedidoRepository pedidoRepository)
+        public CreatePedidoHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository)
         {
             _notificationContext = notificationContext;
             _produtoRepository = produtoRepository;
             _pedidoRepository = pedidoRepository;
+            _clienteRepository = clienteRepository;
         }
 
-        public async Task<int> Handle(CreatePedido request, CancellationToken cancellationToken)
+        public async Task<PedidoViewModel> Handle(CreatePedido request, CancellationToken cancellationToken)
         {
+            PedidoViewModel result = new();
             List<PedidoItem> itens = new List<PedidoItem>();
 
             foreach (var i in request.Itens)
@@ -35,41 +39,58 @@ namespace Application.Features.PedidoContext
                 {
                     _notificationContext.AddNotification("NullReference",
                         $"Produto com identificador '{i.Id}' não encontrado");
-                    return -1;
+                    return result;
                 }
 
-                var item = new PedidoItem(produto.Id, i.Quantidade, produto.Preco);
+                var item = new PedidoItem(produto.Id, i.Quantidade, produto.Preco, i.Observacao!);
 
                 if (item.Invalid)
                 {
                     _notificationContext.AddNotifications(item.ValidationResult);
-                    return -1;
+                    return result;
                 }
-                else
+
+                itens.Add(item);
+
+                result.Itens.Add(new()
                 {
-                    itens.Add(item);
-                }
+                    Nome = produto.Nome,
+                    Preco = item.Preco,
+                    Quantidade = item.Quantidade,
+                    Observacao = item.Observacao!
+                });
             }
 
             Pedido pedido = new();
             pedido.AdicionarItens(itens);
+            result.ValorTotal = pedido.CalculaValorTotal();
+            result.Status = pedido.Status.ToText();
 
             if (request.ClienteId != null)
             {
-                // Buscar o cliente aqui
-                var clienteId = 1;
-                pedido.ReferenciarCliente(clienteId);
+                var cliente = await _clienteRepository.BuscarPorId((int)request.ClienteId);
+
+                if (cliente is null)
+                {
+                    _notificationContext.AddNotification("NullReference",
+                        $"Cliente com identificador '{request.ClienteId}' não encontrado");
+
+                    return result;
+                }
+
+                pedido.ReferenciarCliente(cliente.Id);
             }
 
             if (pedido.Invalid)
             {
                 _notificationContext.AddNotifications(pedido.ValidationResult);
-                return -1;
+                return result;
             }
 
             await _pedidoRepository.Cria(pedido);
+            result.Id = pedido.Id;
 
-            return pedido.Id;
+            return result;
         }
     }
 }

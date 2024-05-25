@@ -23,9 +23,13 @@ namespace Infra.Data.Configuration
                 .IsRequired()
                 .HasColumnType("decimal(18, 2)");
 
+            builder.Property(p => p.Observacao)
+                .IsRequired(false)
+                .HasColumnType("varchar(255)");
+
             builder.HasOne<Produto>()
-                .WithOne()
-                .HasForeignKey<PedidoItem>(e => e.ProdutoId)
+                .WithMany()
+                .HasForeignKey(e => e.ProdutoId)
                 .IsRequired();
         }
     }

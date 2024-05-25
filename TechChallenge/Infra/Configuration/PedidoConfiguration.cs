@@ -17,8 +17,8 @@ namespace Infra.Data.Configuration
 
             builder
                 .HasOne<Cliente>()
-                .WithOne()
-                .HasForeignKey<Pedido>(c => c.ClienteId)
+                .WithMany()
+                .HasForeignKey(c => c.ClienteId)
                 .IsRequired(false);
 
             builder.Property(p => p.Status)
@@ -27,7 +27,6 @@ namespace Infra.Data.Configuration
 
             builder.HasMany(e => e.Itens)
                 .WithOne()
-                .HasForeignKey(e => e.PedidoId)
                 .IsRequired();
         }
     }

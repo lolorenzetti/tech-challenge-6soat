@@ -4,15 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infra.Data.Configuration
 {
-    public class ProdutoConfiguration : IEntityTypeConfiguration<Produto>
+    public class ProdutoConfiguration : BaseEntityConfiguration<Produto>
     {
-        public void Configure(EntityTypeBuilder<Produto> builder)
+        public override void Configure(EntityTypeBuilder<Produto> builder)
         {
-            builder.Ignore(p => p.ValidationResult);
-            builder.Ignore(p => p.Invalid);
-            builder.Ignore(p => p.Valid);
-
-            builder.HasKey(p => p.Id);
+            base.Configure(builder);
 
             builder.Property(c => c.Nome)
                 .IsRequired()

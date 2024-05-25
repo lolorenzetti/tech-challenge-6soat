@@ -45,5 +45,11 @@ namespace Infra.Data.Repository
                 .Include(p => p.Itens)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<List<Pedido>> ObterTodos()
+        {
+            return await _context.Pedidos
+                .Include(p => p.Itens).ToListAsync();
+        }
     }
 }

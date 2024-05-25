@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,12 @@ namespace Domain.Entities
 {
     public class PedidoItem : Entity
     {
-        public PedidoItem(int produtoId, int quantidade, decimal preco)
+        public PedidoItem(int produtoId, int quantidade, decimal preco, string observacao)
         {
             ProdutoId = produtoId;
             Quantidade = quantidade;
             Preco = preco;
+            Observacao = observacao;
             Validate(this, new PedidoItemValidator());
         }
 
@@ -21,6 +23,7 @@ namespace Domain.Entities
         public int ProdutoId { get; private set; } // Referência ao agregado Produto
         public int Quantidade { get; private set; }
         public decimal Preco { get; private set; }
+        public string? Observacao { get; private set; }
 
         public void AdicionarQuantidade(int qtd)
         {
@@ -30,6 +33,11 @@ namespace Domain.Entities
         public void RemoverQuantidade(int qtd)
         {
             Quantidade -= qtd;
+        }
+
+        public void EditaObservacao(string observacao)
+        {
+            Observacao = observacao;
         }
     }
 
@@ -48,6 +56,10 @@ namespace Domain.Entities
             RuleFor(p => p.Preco)
                 .GreaterThan(0)
                 .WithMessage("O preço deve ser maior que zero");
+
+            RuleFor(p => p.Observacao)
+                .MaximumLength(255)
+                .WithMessage("Tamanho máximo para observaçao é de 255 caracteres");
         }
     }
 }

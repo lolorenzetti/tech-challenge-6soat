@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240523155954_addPedidoContext")]
-    partial class addPedidoContext
+    [Migration("20240525024656_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,8 +59,7 @@ namespace Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Pedidos");
                 });
@@ -70,6 +69,9 @@ namespace Infra.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Observacao")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
@@ -87,8 +89,7 @@ namespace Infra.Data.Migrations
 
                     b.HasIndex("PedidoId");
 
-                    b.HasIndex("ProdutoId")
-                        .IsUnique();
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("PedidoItems");
                 });
@@ -121,8 +122,8 @@ namespace Infra.Data.Migrations
             modelBuilder.Entity("Domain.Entities.Pedido", b =>
                 {
                     b.HasOne("Domain.Entities.Cliente", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.Pedido", "ClienteId");
+                        .WithMany()
+                        .HasForeignKey("ClienteId");
                 });
 
             modelBuilder.Entity("Domain.Entities.PedidoItem", b =>
@@ -134,8 +135,8 @@ namespace Infra.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Produto", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.PedidoItem", "ProdutoId")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

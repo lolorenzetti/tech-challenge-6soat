@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.PedidoContext
 {
-    public class ListaPedido : IRequest<PedidoViewModel>
+    public class ListPedidos : IRequest<List<PedidoViewModel>>
     {
-        public int Id { get; set; }
     }
 }
