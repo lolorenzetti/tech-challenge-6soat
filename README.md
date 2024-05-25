@@ -4,8 +4,8 @@
 
 O projeto **Tech Challenge** é uma API desenvolvida em C# com .NET 6.0 para gestão de pedidos, onde os clientes podem se identificar e escolher produtos de diversas categorias. A API permite o cadastro, edição, exclusão e consulta de produtos, bem como a realização e acompanhamento de pedidos.
 
-## BrainStorming
-- [Miro](https://miro.com/app/board/uXjVKX1L2Zs=/)
+## Event Storming
+- Link da documentação do event storming do grupo: [Miro](https://miro.com/app/board/uXjVKX1L2Zs=/)
 
 ## Funcionalidades
 
