@@ -79,6 +79,7 @@ namespace Application.Features.PedidoContext
                 }
 
                 pedido.ReferenciarCliente(cliente.Id);
+                result.ClienteId = pedido.ClienteId;
             }
 
             if (pedido.Invalid)
@@ -89,6 +90,7 @@ namespace Application.Features.PedidoContext
 
             await _pedidoRepository.Cria(pedido);
             result.Id = pedido.Id;
+
 
             return result;
         }

@@ -12,6 +12,7 @@ namespace Application.Models.ViewModel
         public List<PedidoItemViewModel> Itens { get; set; } = new();
         public decimal ValorTotal { get; set; }
         public string Status { get; set; } = string.Empty;
+        public int? ClienteId { get; set; }
     }
 
     public record PedidoItemViewModel

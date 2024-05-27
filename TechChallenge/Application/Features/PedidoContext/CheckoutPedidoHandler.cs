@@ -44,6 +44,7 @@ namespace Application.Features.PedidoContext
             result.Id = pedido.Id;
             result.Status = pedido.Status.ToText();
             result.ValorTotal = pedido.CalculaValorTotal();
+            result.ClienteId = pedido.ClienteId;
 
             foreach (var i in pedido.Itens)
             {

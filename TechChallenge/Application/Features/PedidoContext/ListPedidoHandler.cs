@@ -35,6 +35,7 @@ namespace Application.Features.PedidoContext
                 pvm.Id = pedido.Id;
                 pvm.ValorTotal = pedido.CalculaValorTotal();
                 pvm.Status = pedido.Status.ToText();
+                pvm.ClienteId = pedido.ClienteId;
 
                 foreach (var pedidoItem in pedido.Itens)
                 {
