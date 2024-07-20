@@ -28,7 +28,5 @@ services:
       - '3307:3306'
     expose:
       - '3306'
-    volumes:
-      - './mysql-data/db:/var/lib/mysql'  
     networks:
       - tech-challenge-net
