@@ -41,7 +41,7 @@ namespace Application.Features.PedidoContext.Create
 
                 if (item.Invalid)
                 {
-                    _notificationContext.AddNotifications(item.ValidationResult);
+                    _notificationContext.AddNotifications(item.GetErrors());
                     return result;
                 }
 
@@ -79,7 +79,7 @@ namespace Application.Features.PedidoContext.Create
 
             if (pedido.Invalid)
             {
-                _notificationContext.AddNotifications(pedido.ValidationResult);
+                _notificationContext.AddNotifications(pedido.GetErrors());
                 return result;
             }
 

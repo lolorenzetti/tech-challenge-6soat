@@ -65,9 +65,9 @@ namespace Domain.Entities
             Status = StatusPedido.FINALIZADO;
         }
 
-        public override void Validar()
+        public void Validar()
         {
-            PedidoValidatorFactory.Create().Validar(this);
+            base.Validar<Pedido>(this, PedidoValidatorFactory.Create());
         }
     }
 }

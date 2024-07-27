@@ -10,18 +10,11 @@ namespace Domain.Entities
             Email = email;
             Cpf = cpf;
 
-            Validar();
+            Validar<Cliente>(this, ClienteValidatorFactory.Create());
         }
 
         public string Nome { get; }
         public string Email { get; }
         public string Cpf { get; }
-
-        public override void Validar()
-        {
-            ClienteValidatorFactory
-                .Create()
-                .Validar(this);
-        }
     }
 }

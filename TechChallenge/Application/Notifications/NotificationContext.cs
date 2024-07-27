@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Application.Notifications
+﻿namespace Application.Notifications
 {
     public class NotificationContext
     {
@@ -51,11 +49,11 @@ namespace Application.Notifications
             }
         }
 
-        public void AddNotifications(IEnumerable<ItemErro> notifications)
+        public void AddNotifications(IDictionary<string, string> notifications)
         {
             foreach (var item in notifications)
             {
-                _notifications.Add(new(item.Context, item.Message));
+                _notifications.Add(new(item.Key, item.Value));
             }
         }
     }

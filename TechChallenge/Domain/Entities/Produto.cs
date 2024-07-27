@@ -38,9 +38,9 @@ namespace Domain.Entities
             Validar();
         }
 
-        public override void Validar()
+        public void Validar()
         {
-            ProdutoValidatorFactory.Create().Validar(this);
+            base.Validar<Produto>(this, ProdutoValidatorFactory.Create());
         }
     }
 }

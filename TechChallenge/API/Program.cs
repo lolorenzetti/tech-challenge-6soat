@@ -1,8 +1,6 @@
 using API.Filters;
 using Application;
-using Domain.Ports;
 using Infra.Data;
-using Infra.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -28,14 +26,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddInfraData();
+builder.Services.AddInfraData(builder.Configuration);
 builder.Services.AddApplication();
-
-builder.Services.AddDbContext<DatabaseContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("app-database");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-});
 
 var app = builder.Build();
 

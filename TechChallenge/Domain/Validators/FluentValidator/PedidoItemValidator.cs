@@ -11,11 +11,7 @@ namespace Domain.Validators.FluentValidator
 
             foreach (var error in validationResult.Errors)
             {
-                entity.AddError(new ItemErro()
-                {
-                    Context = error.ErrorCode,
-                    Message = error.ErrorMessage
-                });
+                entity.AddError(error.ErrorCode, error.ErrorMessage);
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Application.Features.ClienteContext.Create
 
             if (cliente.Invalid)
             {
-                _notificationContext.AddNotifications(cliente.ValidationResult);
+                _notificationContext.AddNotifications(cliente.GetErrors());
             }
             else
             {

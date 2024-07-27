@@ -39,7 +39,7 @@ namespace Application.Features.ProdutoContext.Create
 
             if (produto.Invalid)
             {
-                _notificationContext.AddNotifications(produto.ValidationResult);
+                _notificationContext.AddNotifications(produto.GetErrors());
                 return -1;
             }
 

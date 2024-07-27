@@ -1,20 +1,21 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using Domain.Validators;
 
 namespace Domain.Entities
 {
     public abstract class Entity
     {
         public int Id { get; private set; }
+        public bool Valid { get; private set; }
+        public bool Invalid => !Valid;
 
-        public List<ItemErro> Errors = new List<ItemErro>();
+        public Dictionary<string, string> Errors = new();
 
-        public void AddError(ItemErro message)
+        public void AddError(string key, string message)
         {
-            Errors.Add(message);
+            Errors.Add(key, message);
         }
 
-        public IEnumerable<ItemErro> GetErrors()
+        public Dictionary<string, string> GetErrors()
         {
             return Errors;
         }
@@ -24,16 +25,16 @@ namespace Domain.Entities
             return Errors.Count > 0;
         }
 
-        public bool Valid { get; private set; }
-        public bool Invalid => !Valid;
-        public ValidationResult ValidationResult { get; private set; } = new ValidationResult();
-
-        public bool Validate<TModel>(TModel model, AbstractValidator<TModel> validator)
+        public bool Validar<TModel>(TModel model, IValidador<TModel> validador)
         {
-            ValidationResult = validator.Validate(model);
-            return Valid = ValidationResult.IsValid;
+            validador.Validar(model);
+            return this.Valid = !this.HasErrors();
         }
+    }
 
-        public abstract void Validar();
+    public record ErrorItem
+    {
+        public string Message { get; set; } = string.Empty;
+        public string Context { get; set; } = string.Empty;
     }
 }

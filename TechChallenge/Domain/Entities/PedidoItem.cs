@@ -10,7 +10,8 @@ namespace Domain.Entities
             Quantidade = quantidade;
             Preco = preco;
             Observacao = observacao;
-            Validar();
+
+            Validar<PedidoItem>(this, PeditoItemValidatorFactory.Create());
         }
 
         public int PedidoId { get; private set; } // Referência ao agregado root (Pedido)
@@ -32,11 +33,6 @@ namespace Domain.Entities
         public void EditaObservacao(string observacao)
         {
             Observacao = observacao;
-        }
-
-        public override void Validar()
-        {
-            PeditoItemValidatorFactory.Create().Validar(this);
         }
     }
 }

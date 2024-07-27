@@ -1,8 +1,6 @@
-﻿using Domain.Entities;
-
-namespace Domain.Validators
+﻿namespace Domain.Validators
 {
-    public interface IValidador<T> where T : Entity
+    public interface IValidador<T>
     {
         public void Validar(T entity);
     }

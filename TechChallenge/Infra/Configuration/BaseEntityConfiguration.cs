@@ -8,9 +8,8 @@ namespace Infra.Data.Configuration
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.Ignore(p => p.Invalid);
             builder.Ignore(p => p.Valid);
-            builder.Ignore(p => p.ValidationResult);
+            builder.Ignore(p => p.Invalid);
             builder.Ignore(p => p.Errors);
 
             builder.HasKey(p => p.Id);
