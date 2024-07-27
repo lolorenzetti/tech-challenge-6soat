@@ -1,12 +1,7 @@
-﻿using Application.Models.ViewModel;
-using Application.Notifications;
+﻿using Application.Notifications;
+using Domain;
 using Domain.Ports;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.ProdutoContext
 {

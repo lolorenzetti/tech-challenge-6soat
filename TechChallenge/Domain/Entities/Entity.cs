@@ -1,12 +1,28 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using System;
 
 namespace Domain.Entities
 {
     public abstract class Entity
     {
         public int Id { get; private set; }
+
+        public List<ItemErro> Errors = new List<ItemErro>();
+
+        public void AddError(ItemErro message)
+        {
+            Errors.Add(message);
+        }
+
+        public IEnumerable<ItemErro> GetErrors()
+        {
+            return Errors;
+        }
+
+        public bool HasErrors()
+        {
+            return Errors.Count > 0;
+        }
 
         public bool Valid { get; private set; }
         public bool Invalid => !Valid;
@@ -17,5 +33,7 @@ namespace Domain.Entities
             ValidationResult = validator.Validate(model);
             return Valid = ValidationResult.IsValid;
         }
+
+        public abstract void Validar();
     }
 }

@@ -1,12 +1,8 @@
 ﻿using Application.Models.ViewModel;
 using Application.Notifications;
+using Domain;
 using Domain.Ports;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Features.PedidoContext
 {
@@ -31,7 +27,7 @@ namespace Application.Features.PedidoContext
 
             if (pedido == null)
             {
-                _notificationContext.AddNotification("NullReference", 
+                _notificationContext.AddNotification("NullReference",
                     $"Pedido com identificador {request.PedidoId} não encontrado.");
 
                 return result;

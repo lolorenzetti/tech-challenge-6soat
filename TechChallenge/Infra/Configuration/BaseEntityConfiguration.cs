@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra.Data.Configuration
 {
@@ -16,6 +11,7 @@ namespace Infra.Data.Configuration
             builder.Ignore(p => p.Invalid);
             builder.Ignore(p => p.Valid);
             builder.Ignore(p => p.ValidationResult);
+            builder.Ignore(p => p.Errors);
 
             builder.HasKey(p => p.Id);
         }

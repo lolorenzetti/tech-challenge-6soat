@@ -1,10 +1,5 @@
 ﻿using Domain.Enuns;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Factory;
 
 namespace Domain.Entities
 {
@@ -70,20 +65,9 @@ namespace Domain.Entities
             Status = StatusPedido.FINALIZADO;
         }
 
-        public void Validar()
+        public override void Validar()
         {
-            Validate(this, new PedidoValidator());
-        }
-
-    }
-
-    public class PedidoValidator : AbstractValidator<Pedido>
-    {
-        public PedidoValidator()
-        {
-            RuleFor(p => p.Itens)
-                .NotEmpty()
-                .WithMessage("Não é possível criar um pedido sem itens");
+            PedidoValidatorFactory.Create().Validar(this);
         }
     }
 }

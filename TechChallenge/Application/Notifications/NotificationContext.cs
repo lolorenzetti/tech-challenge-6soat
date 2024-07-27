@@ -1,11 +1,4 @@
-﻿using FluentValidation.Results;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
 
 namespace Application.Notifications
 {
@@ -55,6 +48,14 @@ namespace Application.Notifications
             foreach (var error in validationResult.Errors)
             {
                 AddNotification(error.ErrorCode, error.ErrorMessage);
+            }
+        }
+
+        public void AddNotifications(IEnumerable<ItemErro> notifications)
+        {
+            foreach (var item in notifications)
+            {
+                _notifications.Add(new(item.Context, item.Message));
             }
         }
     }
