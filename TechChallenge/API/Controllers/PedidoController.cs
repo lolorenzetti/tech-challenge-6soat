@@ -1,6 +1,7 @@
-﻿using Application.Features.PedidoContext;
+﻿using Application.Features.PedidoContext.Checkout;
+using Application.Features.PedidoContext.Create;
+using Application.Features.PedidoContext.ListAll;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -29,7 +30,7 @@ namespace API.Controllers
         /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro interno</response>
         [HttpPost]
-        public async Task<IActionResult> CriaPedido(CreatePedido command)
+        public async Task<IActionResult> CriaPedido(CreatePedidoRequest command)
         {
             var id = await _mediator.Send(command);
             return Created("api/pedido", id);
@@ -47,7 +48,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> ListaPedido()
         {
-            ListPedidos command = new();
+            ListAllPedidosRequest command = new();
             var list = await _mediator.Send(command);
             return Ok(list);
         }
@@ -67,7 +68,7 @@ namespace API.Controllers
         [Route("{id}/checkout")]
         public async Task<IActionResult> CheckoutPedido([FromRoute] int id)
         {
-            var command = new CheckoutPedido(id);
+            var command = new CheckoutPedidoRequest(id);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

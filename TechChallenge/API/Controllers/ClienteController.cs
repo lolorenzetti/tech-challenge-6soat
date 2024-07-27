@@ -1,7 +1,6 @@
-﻿using Application.Features.ClienteContext;
-using Application.Models.ViewModel;
+﻿using Application.Features.ClienteContext.Create;
+using Application.Features.ClienteContext.GetByCpf;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -32,7 +31,7 @@ namespace API.Controllers
         [Route("{cpf}")]
         public async Task<IActionResult> BuscarPorCpf([FromRoute] string cpf)
         {
-            RequestClienteByCpf command = new() { Cpf = cpf };
+            GetClienteByCpfRequest command = new() { Cpf = cpf };
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -50,7 +49,7 @@ namespace API.Controllers
         /// <response code="400">Erros de validação</response>
         /// <response code="500">Erro interno</response>
         [HttpPost]
-        public async Task<IActionResult> CadastrarCliente(CreateCliente command)
+        public async Task<IActionResult> CadastrarCliente(CreateClienteRequest command)
         {
             var result = await _mediator.Send(command);
             return Created("/clientes", result);
