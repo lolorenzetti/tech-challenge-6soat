@@ -1,6 +1,4 @@
-﻿using Domain.Enuns;
-
-namespace Application.Features.PedidoContext
+﻿namespace Application.Features.PedidoContext
 {
     public class ListPedidosResponse
     {
@@ -11,8 +9,8 @@ namespace Application.Features.PedidoContext
     {
         public int Id { get; set; }
         public decimal ValorTotal { get; set; }
-        public StatusPedido StatusPedido { get; set; }
-        public StatusPagamento StatusPagamento { get; set; }
+        public string StatusPedido { get; set; } = string.Empty;
+        public string StatusPagamento { get; set; } = string.Empty;
         public string PagamentoExternoId { get; set; } = string.Empty;
     }
 

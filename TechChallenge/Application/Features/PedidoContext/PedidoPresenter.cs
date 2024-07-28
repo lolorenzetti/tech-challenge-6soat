@@ -19,7 +19,8 @@ namespace Application.Features.PedidoContext
 
         public async Task<CheckoutPedidoResponse> ToCheckoutPedidoResponse(Pedido pedido)
         {
-            return await Task.FromResult(_mapper.Map<CheckoutPedidoResponse>(pedido));
+            var map = _mapper.Map<CheckoutPedidoResponse>(pedido);
+            return await Task.FromResult(map);
         }
 
         public async Task<ListPedidosResponse> ToListPedidoResponse(List<Pedido> pedidos)
