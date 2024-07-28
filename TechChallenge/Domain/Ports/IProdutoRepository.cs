@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Enuns;
-using System.Collections.Generic;
 
 namespace Domain.Ports
 {
@@ -9,7 +8,8 @@ namespace Domain.Ports
         Task<IEnumerable<Produto>> ObterTodos();
         Task<IEnumerable<Produto>> ObterPorCategoria(CategoriaProduto categoria);
         Task<Produto?> ObterPorId(int id);
-        Task<int> Adicionar(Produto produto);
+        Task<string> ObterNome(int id);
+        Task<Produto> Adicionar(Produto produto);
         Task Atualizar(Produto produto);
         Task Deletar(int id);
     }

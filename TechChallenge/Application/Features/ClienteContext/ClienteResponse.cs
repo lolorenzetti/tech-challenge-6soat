@@ -1,6 +1,6 @@
-﻿namespace Application.Features.ClienteContext.GetByCpf
+﻿namespace Application.Features.ClienteContext
 {
-    public class GetClienteByCpfResponse
+    public record ClienteResponse
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;

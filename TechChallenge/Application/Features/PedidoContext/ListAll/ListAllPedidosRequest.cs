@@ -2,7 +2,7 @@
 
 namespace Application.Features.PedidoContext.ListAll
 {
-    public class ListAllPedidosRequest : IRequest<ListAllPedidosResponse>
+    public class ListAllPedidosRequest : IRequest<ListPedidosResponse>
     {
     }
 }

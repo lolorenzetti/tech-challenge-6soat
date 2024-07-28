@@ -1,4 +1,5 @@
-﻿using Application.Features.ClienteContext.Create;
+﻿using Application.Features.ClienteContext;
+using Application.Features.ClienteContext.Create;
 using Application.Features.ClienteContext.GetByCpf;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace API.Controllers
         /// <response code="400">Erros de validação</response>
         /// <response code="500">Erro interno</response>
         [HttpPost]
-        public async Task<IActionResult> CadastrarCliente(CreateClienteRequest command)
+        public async Task<ActionResult<ClienteResponse>> CadastrarCliente(CreateClienteRequest command)
         {
             var result = await _mediator.Send(command);
             return Created("/clientes", result);

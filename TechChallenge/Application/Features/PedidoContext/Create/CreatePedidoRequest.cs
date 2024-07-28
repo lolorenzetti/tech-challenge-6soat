@@ -2,7 +2,7 @@
 
 namespace Application.Features.PedidoContext.Create
 {
-    public class CreatePedidoRequest : IRequest<CreatePedidoResponse>
+    public class CreatePedidoRequest : IRequest<PedidoResponse>
     {
         public CreatePedidoRequest(List<PedidoItemRequest> itens)
         {

@@ -1,6 +1,6 @@
-﻿namespace Application.Features.PedidoContext.ListAll
+﻿namespace Application.Features.PedidoContext
 {
-    public class ListAllPedidosResponse
+    public class ListPedidosResponse
     {
         public List<PedidoResponse> Pedidos { get; set; } = new List<PedidoResponse>();
     }
@@ -11,11 +11,12 @@
         public List<PedidoItemResponse> Itens { get; set; } = new();
         public decimal ValorTotal { get; set; }
         public string Status { get; set; } = string.Empty;
-        public int? ClienteId { get; set; }
+        public string? ClienteNome { get; set; } = string.Empty;
     }
 
     public record PedidoItemResponse
     {
+        public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public int Quantidade { get; set; }
         public decimal Preco { get; set; }

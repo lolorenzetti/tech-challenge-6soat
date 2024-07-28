@@ -1,29 +1,34 @@
 ﻿using Application.Notifications;
-using Domain;
 using Domain.Entities;
 using Domain.Ports;
 using MediatR;
 
 namespace Application.Features.PedidoContext.Create
 {
-    public class CreatePedidoHandler : IRequestHandler<CreatePedidoRequest, CreatePedidoResponse>
+    public class CreatePedidoHandler : IRequestHandler<CreatePedidoRequest, PedidoResponse>
     {
         private readonly NotificationContext _notificationContext;
         private readonly IProdutoRepository _produtoRepository;
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IClienteRepository _clienteRepository;
+        private readonly IPedidoPresenter _presenter;
 
-        public CreatePedidoHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository, IPedidoRepository pedidoRepository, IClienteRepository clienteRepository)
+        public CreatePedidoHandler(
+            NotificationContext notificationContext,
+            IProdutoRepository produtoRepository,
+            IPedidoRepository pedidoRepository,
+            IClienteRepository clienteRepository,
+            IPedidoPresenter presenter)
         {
             _notificationContext = notificationContext;
             _produtoRepository = produtoRepository;
             _pedidoRepository = pedidoRepository;
             _clienteRepository = clienteRepository;
+            _presenter = presenter;
         }
 
-        public async Task<CreatePedidoResponse> Handle(CreatePedidoRequest request, CancellationToken cancellationToken)
+        public async Task<PedidoResponse> Handle(CreatePedidoRequest request, CancellationToken cancellationToken)
         {
-            CreatePedidoResponse result = new();
             List<PedidoItem> itens = new List<PedidoItem>();
 
             foreach (var i in request.Itens)
@@ -34,7 +39,7 @@ namespace Application.Features.PedidoContext.Create
                 {
                     _notificationContext.AddNotification("NullReference",
                         $"Produto com identificador '{i.Id}' não encontrado");
-                    return result;
+                    return null!;
                 }
 
                 var item = new PedidoItem(produto.Id, i.Quantidade, produto.Preco, i.Observacao!);
@@ -42,24 +47,14 @@ namespace Application.Features.PedidoContext.Create
                 if (item.Invalid)
                 {
                     _notificationContext.AddNotifications(item.GetErrors());
-                    return result;
+                    return null!;
                 }
 
                 itens.Add(item);
-
-                result.Itens.Add(new()
-                {
-                    Nome = produto.Nome,
-                    Preco = item.Preco,
-                    Quantidade = item.Quantidade,
-                    Observacao = item.Observacao!
-                });
             }
 
             Pedido pedido = new();
             pedido.AdicionarItens(itens);
-            result.ValorTotal = pedido.CalculaValorTotal();
-            result.Status = pedido.Status.ToText();
 
             if (request.ClienteId != null)
             {
@@ -70,24 +65,21 @@ namespace Application.Features.PedidoContext.Create
                     _notificationContext.AddNotification("NullReference",
                         $"Cliente com identificador '{request.ClienteId}' não encontrado");
 
-                    return result;
+                    return null!;
                 }
 
                 pedido.ReferenciarCliente(cliente.Id);
-                result.ClienteId = pedido.ClienteId;
             }
 
             if (pedido.Invalid)
             {
                 _notificationContext.AddNotifications(pedido.GetErrors());
-                return result;
+                return null!;
             }
 
             await _pedidoRepository.Cria(pedido);
-            result.Id = pedido.Id;
 
-
-            return result;
+            return await _presenter.ToPedidoResponse(pedido);
         }
     }
 }

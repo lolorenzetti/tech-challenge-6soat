@@ -5,37 +5,25 @@ using MediatR;
 
 namespace Application.Features.ProdutoContext.GetByCategoria
 {
-    public class RequestProdutoByCategoriaHandler : IRequestHandler<GetProdutoByCategoriaRequest, GetProdutoByCategoriaResponse>
+    public class RequestProdutoByCategoriaHandler : IRequestHandler<GetProdutoByCategoriaRequest, ListProdutoResponse>
     {
         private readonly NotificationContext _notificationContext;
         private readonly IProdutoRepository _produtoRepository;
+        private readonly IProdutoPresenter _presenter;
 
-        public RequestProdutoByCategoriaHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository)
+        public RequestProdutoByCategoriaHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository, IProdutoPresenter presenter)
         {
             _notificationContext = notificationContext;
             _produtoRepository = produtoRepository;
+            _presenter = presenter;
         }
 
-        public async Task<GetProdutoByCategoriaResponse> Handle(GetProdutoByCategoriaRequest request, CancellationToken cancellationToken)
+        public async Task<ListProdutoResponse> Handle(GetProdutoByCategoriaRequest request, CancellationToken cancellationToken)
         {
-            GetProdutoByCategoriaResponse result = new();
-
             var produtos = await _produtoRepository
                 .ObterPorCategoria(request.CategoriaId.ToCategoriaProduto());
 
-            foreach (var p in produtos)
-            {
-                result.Produtos.Add(new ProdutoResponse()
-                {
-                    Id = p.Id,
-                    Nome = p.Nome,
-                    Descricao = p.Descricao,
-                    Categoria = p.Categoria.ToText(),
-                    Preco = p.Preco
-                });
-            };
-
-            return result;
+            return await _presenter.ToListProdutoResponse(produtos.ToList());
         }
     }
 }

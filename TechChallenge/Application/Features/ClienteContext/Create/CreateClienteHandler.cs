@@ -5,37 +5,31 @@ using MediatR;
 
 namespace Application.Features.ClienteContext.Create
 {
-    public class CreateClienteHandler : IRequestHandler<CreateClienteRequest, CreateClienteResponse>
+    public class CreateClienteHandler : IRequestHandler<CreateClienteRequest, ClienteResponse>
     {
         private NotificationContext _notificationContext;
         private IClienteRepository _clienteRepository;
+        private IClientePresenter _presenter;
 
-        public CreateClienteHandler(NotificationContext notificationContext, IClienteRepository clienteRepository)
+        public CreateClienteHandler(
+            NotificationContext notificationContext,
+            IClienteRepository clienteRepository,
+            IClientePresenter presenter)
         {
             _notificationContext = notificationContext;
             _clienteRepository = clienteRepository;
+            _presenter = presenter;
         }
 
-        public async Task<CreateClienteResponse> Handle(CreateClienteRequest request, CancellationToken cancellationToken)
+        public async Task<ClienteResponse> Handle(CreateClienteRequest request, CancellationToken cancellationToken)
         {
             var cliente = new Cliente(request.Nome, request.Email, request.Cpf);
-            var result = new CreateClienteResponse();
 
             if (cliente.Invalid)
-            {
                 _notificationContext.AddNotifications(cliente.GetErrors());
-            }
-            else
-            {
-                await _clienteRepository.CadastrarCliente(cliente);
 
-                result.Id = cliente.Id;
-                result.Cpf = cliente.Cpf;
-                result.Nome = cliente.Nome;
-                result.Email = cliente.Email;
-            }
-
-            return result;
+            await _clienteRepository.CadastrarCliente(cliente);
+            return await _presenter.ToClienteResponse(cliente);
         }
     }
 }

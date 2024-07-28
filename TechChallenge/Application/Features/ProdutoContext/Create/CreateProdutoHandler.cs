@@ -6,18 +6,20 @@ using MediatR;
 
 namespace Application.Features.ProdutoContext.Create
 {
-    public class CreateProdutoHandler : IRequestHandler<CreateProdutoRequest, int>
+    public class CreateProdutoHandler : IRequestHandler<CreateProdutoRequest, ProdutoResponse>
     {
         private readonly NotificationContext _notificationContext;
         private readonly IProdutoRepository _produtoRepository;
+        private readonly IProdutoPresenter _presenter;
 
-        public CreateProdutoHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository)
+        public CreateProdutoHandler(NotificationContext notificationContext, IProdutoRepository produtoRepository, IProdutoPresenter presenter)
         {
             _notificationContext = notificationContext;
             _produtoRepository = produtoRepository;
+            _presenter = presenter;
         }
 
-        public async Task<int> Handle(CreateProdutoRequest request, CancellationToken cancellationToken)
+        public async Task<ProdutoResponse> Handle(CreateProdutoRequest request, CancellationToken cancellationToken)
         {
             CategoriaProduto categoria;
 
@@ -25,8 +27,7 @@ namespace Application.Features.ProdutoContext.Create
             {
                 _notificationContext.AddNotification("NullReference",
                     $"Categoria com identificador {request.Categoria} produto inválida");
-
-                return -1;
+                return null!;
             }
 
             var produto = new Produto(
@@ -40,11 +41,12 @@ namespace Application.Features.ProdutoContext.Create
             if (produto.Invalid)
             {
                 _notificationContext.AddNotifications(produto.GetErrors());
-                return -1;
+                return null!;
             }
 
             await _produtoRepository.Adicionar(produto);
-            return produto.Id;
+
+            return await _presenter.ToProdutoResponse(produto);
         }
     }
 }
