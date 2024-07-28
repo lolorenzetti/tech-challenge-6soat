@@ -73,6 +73,25 @@ namespace Domain.Entities
             Status = StatusPedido.FINALIZADO;
         }
 
+        public void AtualizaProximoStatus()
+        {
+            switch (Status)
+            {
+                case StatusPedido.RECEBIDO:
+                    Status = StatusPedido.EM_PREPARACAO;
+                    break;
+                case StatusPedido.EM_PREPARACAO:
+                    Status = StatusPedido.PRONTO;
+                    break;
+                case StatusPedido.PRONTO:
+                    Status = StatusPedido.FINALIZADO;
+                    break;
+                default:
+                    // Demais casos são alterados somente mediante alguma ação.
+                    break;
+            }
+        }
+
         public void Validar()
         {
             base.Validar<Pedido>(this, PedidoValidatorFactory.Create());

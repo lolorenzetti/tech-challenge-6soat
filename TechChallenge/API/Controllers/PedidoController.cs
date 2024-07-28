@@ -3,6 +3,7 @@ using Application.Features.PedidoContext.ConfirmPayment;
 using Application.Features.PedidoContext.Create;
 using Application.Features.PedidoContext.GetStatusById;
 using Application.Features.PedidoContext.ListAll;
+using Application.Features.PedidoContext.UpdateStatus;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,6 +81,15 @@ namespace API.Controllers
         public async Task<IActionResult> ObterStatusPedido([FromRoute] int id)
         {
             var command = new GetStatusPedidoByIdRequest() { PedidoId = id };
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("{id}/next-status")]
+        public async Task<IActionResult> AtualizaProximoStatus([FromRoute] int id)
+        {
+            var command = new UpdateStatusPedidoRequest() { PedidoId = id };
             var result = await _mediator.Send(command);
             return Ok(result);
         }

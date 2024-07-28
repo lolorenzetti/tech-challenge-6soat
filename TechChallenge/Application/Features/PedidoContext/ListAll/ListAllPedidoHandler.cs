@@ -1,4 +1,5 @@
 ﻿using Application.Notifications;
+using Domain.Enuns;
 using Domain.Ports;
 using MediatR;
 
@@ -26,7 +27,18 @@ namespace Application.Features.PedidoContext.ListAll
         public async Task<ListPedidosResponse> Handle(ListAllPedidosRequest request, CancellationToken cancellationToken)
         {
             var pedidos = await _pedidoRepository.ObterTodos();
-            return await _presenter.ToListPedidoResponse(pedidos);
+
+            var filter = pedidos
+                .Where(p =>
+                   p.Status == StatusPedido.PRONTO
+                || p.Status == StatusPedido.EM_PREPARACAO
+                || p.Status == StatusPedido.RECEBIDO)
+                .OrderBy(p =>
+                    p.Status == StatusPedido.PRONTO ? 0 : p.Status == StatusPedido.EM_PREPARACAO ? 1 : 2)
+                .ThenBy(p => p.Id)
+                .ToList();
+
+            return await _presenter.ToListPedidoResponse(filter);
         }
     }
 }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Features.PedidoContext.Create
 {
-    public class CreatePedidoHandler : IRequestHandler<CreatePedidoRequest, PedidoResponse>
+    public class CreatePedidoHandler : IRequestHandler<CreatePedidoRequest, CheckoutPedidoResponse>
     {
         private readonly NotificationContext _notificationContext;
         private readonly IProdutoRepository _produtoRepository;
@@ -30,7 +30,7 @@ namespace Application.Features.PedidoContext.Create
             _pagamentoExternoGateway = pagamentoExternoGateway;
         }
 
-        public async Task<PedidoResponse> Handle(CreatePedidoRequest request, CancellationToken cancellationToken)
+        public async Task<CheckoutPedidoResponse> Handle(CreatePedidoRequest request, CancellationToken cancellationToken)
         {
             List<PedidoItem> itens = new List<PedidoItem>();
 
@@ -88,7 +88,7 @@ namespace Application.Features.PedidoContext.Create
 
             await _pedidoRepository.Cria(pedido);
 
-            return await _presenter.ToPedidoResponse(pedido);
+            return await _presenter.ToCheckoutPedidoResponse(pedido);
         }
     }
 }

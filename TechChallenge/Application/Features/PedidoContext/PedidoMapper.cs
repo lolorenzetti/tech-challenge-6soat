@@ -17,7 +17,9 @@ namespace Application.Features.PedidoContext
 
             CreateMap<Pedido, CheckoutPedidoResponse>()
                 .ForMember(dest => dest.ValorTotal, opt => opt.MapFrom(src => src.CalculaValorTotal()))
-                .ForMember(dest => dest.StatusPedido, opt => opt.MapFrom(src => src.Status.ToText()));
+                .ForMember(dest => dest.StatusPedido, opt => opt.MapFrom(src => src.Status.ToText()))
+                .ForMember(dest => dest.StatusPagamento, opt => opt.MapFrom(src => src.Pagamento.Status.ToText()))
+                .ForMember(dest => dest.PagamentoExternoId, opt => opt.MapFrom(src => src.Pagamento.PagamentoExternoId));
 
             CreateMap<PedidoItem, PedidoItemResponse>()
                 .ForMember(dest => dest.ProdutoId, opt => opt.MapFrom(src => src.ProdutoId))
