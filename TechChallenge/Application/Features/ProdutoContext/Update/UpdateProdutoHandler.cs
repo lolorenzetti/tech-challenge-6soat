@@ -1,4 +1,5 @@
 ﻿using Application.Notifications;
+using Domain;
 using Domain.Ports;
 using MediatR;
 
@@ -29,6 +30,8 @@ namespace Application.Features.ProdutoContext.Update
                 _notificationContext.AddNotification("NullReference", "Produto não encontrado!");
                 return null!;
             }
+
+            produto.Atualiza(request.Nome, request.Descricao, request.Categoria.ToCategoriaProduto(), request.Preco);
 
             await _produtoRepository.Atualizar(produto);
 

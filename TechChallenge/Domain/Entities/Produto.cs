@@ -30,7 +30,7 @@ namespace Domain.Entities
                 this.Categoria = (CategoriaProduto)categoria;
             }
 
-            if (preco != null && preco != this.Preco)
+            if (preco != null && preco > 0 && preco != this.Preco)
             {
                 this.Preco = (decimal)preco;
             }

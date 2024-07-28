@@ -4,9 +4,7 @@ using Application.Features.ProdutoContext.GetByCategoria;
 using Application.Features.ProdutoContext.GetById;
 using Application.Features.ProdutoContext.Update;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
 
 namespace API.Controllers
 {
@@ -104,14 +102,14 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Atualiza um produto existente</remarks>
         /// <param name="command">dados do produto atualizado</param>
-        /// <response code="204">Sucesso</response>
+        /// <response code="200">Sucesso</response>
         /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro no servidor</response>
         [HttpPut]
         public async Task<IActionResult> Atualizar(UpdateProdutoRequest command)
         {
-            await _mediator.Send(command);
-            return NoContent();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

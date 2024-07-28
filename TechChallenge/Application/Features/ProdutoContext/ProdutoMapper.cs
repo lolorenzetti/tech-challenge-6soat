@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.Entities;
 
 namespace Application.Features.ProdutoContext
@@ -7,7 +8,8 @@ namespace Application.Features.ProdutoContext
     {
         public ProdutoMapper()
         {
-            CreateMap<Produto, ProdutoResponse>();
+            CreateMap<Produto, ProdutoResponse>()
+                .ForMember(dest => dest.Categoria, src => src.MapFrom(src => src.Categoria.ToText()));
         }
     }
 }

@@ -17,14 +17,17 @@ namespace Application.Features.ProdutoContext
             ListProdutoResponse result = new();
 
             foreach (var item in produtos)
-                result.Produtos.Add(await ToProdutoResponse(item));
+            {
+                var p = await ToProdutoResponse(item);
+                result.Produtos.Add(p);
+            }
 
             return result;
         }
 
-        public Task<ProdutoResponse> ToProdutoResponse(Produto produto)
+        public async Task<ProdutoResponse> ToProdutoResponse(Produto produto)
         {
-            return Task.FromResult(_mapper.Map<ProdutoResponse>(produto));
+            return await Task.FromResult(_mapper.Map<ProdutoResponse>(produto));
         }
     }
 }

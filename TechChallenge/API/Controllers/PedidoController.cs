@@ -1,5 +1,4 @@
-﻿using Application.Features.PedidoContext.Checkout;
-using Application.Features.PedidoContext.ConfirmPayment;
+﻿using Application.Features.PedidoContext.ConfirmPayment;
 using Application.Features.PedidoContext.Create;
 using Application.Features.PedidoContext.GetStatusById;
 using Application.Features.PedidoContext.ListAll;
@@ -21,7 +20,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Criar novo pedido
+        /// Faz o checkout (criação) do pedido
         /// </summary>
         /// <remarks>
         /// Cria um novo pedido na base de dados. Exemplo:
@@ -57,25 +56,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Faz o checkout do pedido
+        /// Obter o status bem como os detalhes do pedido
         /// </summary>
         /// <remarks>
-        /// Faz o checkout do pedido, atualizando status para RECEBIDO
+        /// Informa o status (detalhes) do pedido informado.
         /// </remarks>
-        /// <param name="id"></param>
-        /// <returns>Pedido</returns>
         /// <response code="200">Sucesso</response>
-        /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro interno</response>
-        [HttpPost]
-        [Route("{id}/checkout")]
-        public async Task<IActionResult> CheckoutPedido([FromRoute] int id)
-        {
-            var command = new CheckoutPedidoRequest(id);
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> ObterStatusPedido([FromRoute] int id)
@@ -85,6 +72,12 @@ namespace API.Controllers
             return Ok(result);
         }
 
+
+        /// <summary>
+        /// Avança o pedido para o próximo status, quando possível.
+        /// </summary>
+        /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro interno</response>
         [HttpPost]
         [Route("{id}/next-status")]
         public async Task<IActionResult> AtualizaProximoStatus([FromRoute] int id)
@@ -94,7 +87,11 @@ namespace API.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Webhook para receber sinalização de pagamento do pedido. Altera o status pedido para RECEBIDO, se o pagamento for aprovado.
+        /// </summary>
+        /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro interno</response>
         [HttpPost]
         [Route("/webhook")]
         public async Task<IActionResult> WebhookPagamento(WebhookPagamentoRequest request)
