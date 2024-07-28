@@ -17,9 +17,9 @@ namespace Application.Features.PedidoContext
             _mapper = mapper;
         }
 
-        public Task<ListPedidosResponse> ToListAllProdutoResponse(List<Pedido> pedidos)
+        public async Task<CheckoutPedidoResponse> ToCheckoutPedidoResponse(Pedido pedido)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_mapper.Map<CheckoutPedidoResponse>(pedido));
         }
 
         public async Task<ListPedidosResponse> ToListPedidoResponse(List<Pedido> pedidos)
@@ -40,7 +40,7 @@ namespace Application.Features.PedidoContext
             var map = _mapper.Map<PedidoResponse>(pedido);
 
             foreach (var item in map.Itens)
-                item.Nome = await _produtoRepository.ObterNome(item.Id);
+                item.Nome = await _produtoRepository.ObterNome(item.ProdutoId);
 
             if (pedido.ClienteId != null)
                 map.ClienteNome = await _clienteRepository.BuscarNomePorId((int)pedido.ClienteId);

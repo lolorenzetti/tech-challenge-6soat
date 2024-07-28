@@ -9,15 +9,22 @@ namespace Domain.Entities
         {
             Status = StatusPedido.PENDENTE_PAGAMENTO;
             Itens = new();
+            Pagamento = new(0);
         }
 
         public int? ClienteId { get; private set; } // Referência ao agregado Cliente
+        public Pagamento Pagamento { get; private set; }
         public StatusPedido Status { get; private set; }
         public List<PedidoItem> Itens { get; private set; }
 
-        public void ReferenciarCliente(int? id)
+        public void ReferenciarCliente(Cliente cliente)
         {
-            ClienteId = id;
+            ClienteId = cliente.Id;
+        }
+
+        public void ReferenciaPagamento(Pagamento pagamento)
+        {
+            Pagamento = pagamento;
         }
 
         public void AdicionarItens(List<PedidoItem> itens)
@@ -55,8 +62,9 @@ namespace Domain.Entities
             Status = StatusPedido.CANCELADO;
         }
 
-        public void ReceberPedido()
+        public void AprovaPagamento()
         {
+            this.Pagamento.AprovaPagamento();
             Status = StatusPedido.RECEBIDO;
         }
 

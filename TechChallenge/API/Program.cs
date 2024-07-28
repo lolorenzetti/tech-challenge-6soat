@@ -1,6 +1,7 @@
 using API.Filters;
 using Application;
 using Infra.Data;
+using Infra.GatewayPagamento;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -27,6 +28,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddInfraData(builder.Configuration);
+builder.Services.AddGatewayPagamento();
 builder.Services.AddApplication();
 
 var app = builder.Build();

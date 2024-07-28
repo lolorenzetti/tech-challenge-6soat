@@ -21,6 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F266E0C8-DB3D-4A4A-9FC9-34B1D0904010}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.GatewayPagamento", "Infra.GatewayPagamento\Infra.GatewayPagamento.csproj", "{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F35DD495-8170-4A0E-965B-432D3C8FB0FE} = {F35DD495-8170-4A0E-965B-432D3C8FB0FE}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +52,10 @@ Global
 		{FC1A838D-2927-495A-B1DD-EEDF63E68D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC1A838D-2927-495A-B1DD-EEDF63E68D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC1A838D-2927-495A-B1DD-EEDF63E68D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +68,7 @@ Global
 		{7C2C5A7A-1C73-4447-8248-40EA9DFFE1F4} = {18853C3E-B1AA-4F30-8079-0D7CD579388A}
 		{18853C3E-B1AA-4F30-8079-0D7CD579388A} = {0B76E5EC-AE7C-4B67-AE4F-CFB5F63118D1}
 		{F266E0C8-DB3D-4A4A-9FC9-34B1D0904010} = {0B76E5EC-AE7C-4B67-AE4F-CFB5F63118D1}
+		{3BE8695C-1888-40CD-BA61-DC1DA5DEABF8} = {F266E0C8-DB3D-4A4A-9FC9-34B1D0904010}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CC1F6D16-44B2-4CF2-A9B5-BBE75C91AF3D}

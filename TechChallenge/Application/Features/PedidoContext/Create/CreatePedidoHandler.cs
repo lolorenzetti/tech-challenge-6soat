@@ -12,19 +12,22 @@ namespace Application.Features.PedidoContext.Create
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IClienteRepository _clienteRepository;
         private readonly IPedidoPresenter _presenter;
+        private readonly IPagamentoExternoGateway _pagamentoExternoGateway;
 
         public CreatePedidoHandler(
             NotificationContext notificationContext,
             IProdutoRepository produtoRepository,
             IPedidoRepository pedidoRepository,
             IClienteRepository clienteRepository,
-            IPedidoPresenter presenter)
+            IPedidoPresenter presenter,
+            IPagamentoExternoGateway pagamentoExternoGateway)
         {
             _notificationContext = notificationContext;
             _produtoRepository = produtoRepository;
             _pedidoRepository = pedidoRepository;
             _clienteRepository = clienteRepository;
             _presenter = presenter;
+            _pagamentoExternoGateway = pagamentoExternoGateway;
         }
 
         public async Task<PedidoResponse> Handle(CreatePedidoRequest request, CancellationToken cancellationToken)
@@ -68,14 +71,20 @@ namespace Application.Features.PedidoContext.Create
                     return null!;
                 }
 
-                pedido.ReferenciarCliente(cliente.Id);
+                pedido.ReferenciarCliente(cliente);
             }
+
 
             if (pedido.Invalid)
             {
                 _notificationContext.AddNotifications(pedido.GetErrors());
                 return null!;
             }
+
+            decimal valorPedido = pedido.CalculaValorTotal();
+            string idExterno = await _pagamentoExternoGateway.CriarPagamento(pedido);
+            Pagamento pagamento = new(valorPedido, idExterno);
+            pedido.ReferenciaPagamento(pagamento);
 
             await _pedidoRepository.Cria(pedido);
 

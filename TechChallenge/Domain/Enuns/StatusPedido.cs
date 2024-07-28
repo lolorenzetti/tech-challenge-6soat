@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Enuns
+﻿namespace Domain.Enuns
 {
     public enum StatusPedido
     {
-        PENDENTE_PAGAMENTO,
+        INICIADO,
         CANCELADO,
         RECEBIDO,
+        PENDENTE_PAGAMENTO,
         EM_PREPARACAO,
         PRONTO,
         FINALIZADO
