@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "c16b0e0b-bff9-4efa-bdbc-6d21a4ae248d",
+		"name": "Tech Challenge API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27684650"
+	},
+	"item": [
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"José Marcos Barbosa\",\r\n  \"email\": \"jose-barbosa83@citadini.imb.br\",\r\n  \"cpf\": \"01963161114\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/cliente",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByCpf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/cliente/01963161114",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"cliente",
+								"01963161114"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Mac Wopper 1.0\",\r\n    \"descricao\": \"Pão, 2x hamburguer 180g, salda, molho especial.\",\r\n    \"categoria\": 0,\r\n    \"preco\": 35.80\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/produto",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"produto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/produto/2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"produto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetByCategoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/produto/categoria/0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"produto",
+								"categoria",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/produto/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"produto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"nome\": \"Mac Wopper 4.0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/produto",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"produto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedido",
+			"item": [
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clienteId\": 1,\r\n    \"itens\": [\r\n        {\r\n            \"id\": 1,\r\n            \"quantidade\": 2,\r\n            \"observacao\": \"Obs: Sem cebola\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/pedido",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Webhook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pagamentoExternoId\": \"2c702964-e7cd-45bd-82f0-c96bfc93ff5e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/webhook",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"webhook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clienteId\": 1,\r\n    \"itens\": [\r\n        {\r\n            \"id\": 1,\r\n            \"quantidade\": 2,\r\n            \"observacao\": \"Sem cebola.\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/pedido",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/pedido/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NextStatus",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/pedido/1/next-status",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"1",
+								"next-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "{{URL}}/api/cliente/01963161114"
+		}
+	]
+}
