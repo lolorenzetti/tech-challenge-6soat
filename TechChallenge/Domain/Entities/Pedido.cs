@@ -1,10 +1,5 @@
 ﻿using Domain.Enuns;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Factory;
 
 namespace Domain.Entities
 {
@@ -14,15 +9,22 @@ namespace Domain.Entities
         {
             Status = StatusPedido.PENDENTE_PAGAMENTO;
             Itens = new();
+            Pagamento = new(0);
         }
 
         public int? ClienteId { get; private set; } // Referência ao agregado Cliente
+        public Pagamento Pagamento { get; private set; }
         public StatusPedido Status { get; private set; }
         public List<PedidoItem> Itens { get; private set; }
 
-        public void ReferenciarCliente(int? id)
+        public void ReferenciarCliente(Cliente cliente)
         {
-            ClienteId = id;
+            ClienteId = cliente.Id;
+        }
+
+        public void ReferenciaPagamento(Pagamento pagamento)
+        {
+            Pagamento = pagamento;
         }
 
         public void AdicionarItens(List<PedidoItem> itens)
@@ -60,8 +62,9 @@ namespace Domain.Entities
             Status = StatusPedido.CANCELADO;
         }
 
-        public void ReceberPedido()
+        public void AprovaPagamento()
         {
+            this.Pagamento.AprovaPagamento();
             Status = StatusPedido.RECEBIDO;
         }
 
@@ -70,20 +73,28 @@ namespace Domain.Entities
             Status = StatusPedido.FINALIZADO;
         }
 
-        public void Validar()
+        public void AtualizaProximoStatus()
         {
-            Validate(this, new PedidoValidator());
+            switch (Status)
+            {
+                case StatusPedido.RECEBIDO:
+                    Status = StatusPedido.EM_PREPARACAO;
+                    break;
+                case StatusPedido.EM_PREPARACAO:
+                    Status = StatusPedido.PRONTO;
+                    break;
+                case StatusPedido.PRONTO:
+                    Status = StatusPedido.FINALIZADO;
+                    break;
+                default:
+                    // Demais casos são alterados somente mediante alguma ação.
+                    break;
+            }
         }
 
-    }
-
-    public class PedidoValidator : AbstractValidator<Pedido>
-    {
-        public PedidoValidator()
+        public void Validar()
         {
-            RuleFor(p => p.Itens)
-                .NotEmpty()
-                .WithMessage("Não é possível criar um pedido sem itens");
+            base.Validar<Pedido>(this, PedidoValidatorFactory.Create());
         }
     }
 }

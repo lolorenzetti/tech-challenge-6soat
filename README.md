@@ -59,7 +59,7 @@ Este comando irá construir as imagens e iniciar os contêineres definidos no ar
 
 4. **Acessar a API**
 
-A API estará disponível em [`http://localhost:8101/swagger/index.html`](http://localhost:8101/swagger/index.html)
+A API estará disponível em [`http://localhost:9101/swagger/index.html`](http://localhost:9101/swagger/index.html)
 
 ---
 

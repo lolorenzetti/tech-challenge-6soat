@@ -1,10 +1,5 @@
 ﻿using Domain.Enuns;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Factory;
 
 namespace Domain.Entities
 {
@@ -17,7 +12,7 @@ namespace Domain.Entities
             Categoria = categoria;
             Preco = preco;
 
-            Validate(this, new ProdutoValidator());
+            Validar();
         }
 
         public string Nome { get; private set; } = string.Empty;
@@ -35,39 +30,17 @@ namespace Domain.Entities
                 this.Categoria = (CategoriaProduto)categoria;
             }
 
-            if (preco != null && preco != this.Preco)
+            if (preco != null && preco > 0 && preco != this.Preco)
             {
                 this.Preco = (decimal)preco;
             }
 
-            Validate(this, new ProdutoValidator());
+            Validar();
         }
-    }
 
-    public class ProdutoValidator : AbstractValidator<Produto>
-    {
-        public ProdutoValidator()
+        public void Validar()
         {
-            RuleFor(p => p.Nome)
-                .NotEmpty()
-                .MinimumLength(3)
-                .WithMessage("Nome do produto deve ter tamanho mínimo de 3 caracteres");
-
-            RuleFor(p => p.Nome)
-                .MaximumLength(100)
-                .WithMessage("Nome deve ter no máximo 100 caracteres");
-
-            RuleFor(p => p.Preco)
-                .GreaterThan(0)
-                .WithMessage("Preço deve ser maior que zero");
-
-            RuleFor(p => p.Descricao)
-                .MaximumLength(255)
-                .WithMessage("Descrição deve ter no máximo 255 caracteres");
-
-            RuleFor(p => p.Categoria)
-                .IsInEnum()
-                .WithMessage("Categoria inválida ou inexistente");
+            base.Validar<Produto>(this, ProdutoValidatorFactory.Create());
         }
     }
 }

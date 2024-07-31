@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra.Data.Repository
 {
@@ -21,6 +16,7 @@ namespace Infra.Data.Repository
         public void Atualiza(Pedido pedido)
         {
             _context.Pedidos.Update(pedido);
+            _context.Pagamentos.Update(pedido.Pagamento);
             _context.SaveChanges();
         }
 
@@ -28,6 +24,7 @@ namespace Infra.Data.Repository
         {
             var p = await _context.Pedidos.AddAsync(pedido);
             await _context.PedidoItems.AddRangeAsync(pedido.Itens);
+            await _context.Pagamentos.AddAsync(pedido.Pagamento);
 
             _context.SaveChanges();
 
@@ -44,12 +41,23 @@ namespace Infra.Data.Repository
             return await _context.Pedidos
                 .Where(p => p.Id == id)
                 .Include(p => p.Itens)
+                .Include(p => p.Pagamento)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Pedido?> ObterPorIdPagamento(string id)
+        {
+            return await _context.Pedidos
+                .Include(p => p.Itens)
+                .Include(p => p.Pagamento)
+                .Where(p => p.Pagamento.PagamentoExternoId == id)
+                .FirstAsync();
         }
 
         public async Task<List<Pedido>> ObterTodos()
         {
             return await _context.Pedidos
+                .Include(p => p.Pagamento)
                 .Include(p => p.Itens).ToListAsync();
         }
     }

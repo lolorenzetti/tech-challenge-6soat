@@ -2,11 +2,6 @@
 using Domain.Enuns;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra.Data.Repository
 {
@@ -19,12 +14,12 @@ namespace Infra.Data.Repository
             _context = context;
         }
 
-        public async Task<int> Adicionar(Produto produto)
+        public async Task<Produto> Adicionar(Produto produto)
         {
             var newProduto = await _context.Produtos.AddAsync(produto);
             _context.SaveChanges();
 
-            return newProduto.Entity.Id;
+            return newProduto.Entity;
         }
 
         public async Task Atualizar(Produto produto)
@@ -44,6 +39,12 @@ namespace Infra.Data.Repository
             }
         }
 
+        public async Task<string> ObterNome(int id)
+        {
+            var p = await _context.Produtos.FirstOrDefaultAsync(s => s.Id == id);
+            return p!.Nome;
+        }
+
         public async Task<IEnumerable<Produto>> ObterPorCategoria(CategoriaProduto categoria)
         {
             return await _context.Produtos
@@ -60,5 +61,6 @@ namespace Infra.Data.Repository
         {
             return await _context.Produtos.ToListAsync();
         }
+
     }
 }

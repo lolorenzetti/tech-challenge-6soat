@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra.Data.Repository
 {
@@ -17,6 +12,12 @@ namespace Infra.Data.Repository
         public ClienteRepository(DatabaseContext context)
         {
             _context = context;
+        }
+
+        public async Task<string> BuscarNomePorId(int id)
+        {
+            var c = await _context.Clientes.FirstOrDefaultAsync(c => c.Id == id);
+            return c!.Nome;
         }
 
         public async Task<Cliente?> BuscarPorCpf(string cpf)

@@ -1,9 +1,4 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Ports
 {
@@ -12,5 +7,6 @@ namespace Domain.Ports
         Task<Cliente> CadastrarCliente(Cliente cliente);
         Task<Cliente?> BuscarPorCpf(string cpf);
         Task<Cliente?> BuscarPorId(int id);
+        Task<string> BuscarNomePorId(int id);
     }
 }

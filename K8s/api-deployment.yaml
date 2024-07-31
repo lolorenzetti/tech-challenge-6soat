@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      name: api
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: matheusfernandesluz/api-tech-challenge:2.1
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: cm-api
+          resources:
+            requests:
+              cpu: 30m
+              memory: "512Mi"

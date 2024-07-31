@@ -1,6 +1,9 @@
-﻿using Application.Features.PedidoContext;
+﻿using Application.Features.PedidoContext.ConfirmPayment;
+using Application.Features.PedidoContext.Create;
+using Application.Features.PedidoContext.GetStatusById;
+using Application.Features.PedidoContext.ListAll;
+using Application.Features.PedidoContext.UpdateStatus;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,7 +20,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Criar novo pedido
+        /// Faz o checkout (criação) do pedido
         /// </summary>
         /// <remarks>
         /// Cria um novo pedido na base de dados. Exemplo:
@@ -29,7 +32,7 @@ namespace API.Controllers
         /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro interno</response>
         [HttpPost]
-        public async Task<IActionResult> CriaPedido(CreatePedido command)
+        public async Task<IActionResult> CriaPedido(CreatePedidoRequest command)
         {
             var id = await _mediator.Send(command);
             return Created("api/pedido", id);
@@ -47,29 +50,54 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> ListaPedido()
         {
-            ListPedidos command = new();
+            ListAllPedidosRequest command = new();
             var list = await _mediator.Send(command);
             return Ok(list);
         }
 
         /// <summary>
-        /// Faz o checkout do pedido
+        /// Obter o status bem como os detalhes do pedido
         /// </summary>
         /// <remarks>
-        /// Faz o checkout do pedido, atualizando status para RECEBIDO
+        /// Informa o status (detalhes) do pedido informado.
         /// </remarks>
-        /// <param name="id"></param>
-        /// <returns>Pedido</returns>
         /// <response code="200">Sucesso</response>
-        /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro interno</response>
-        [HttpPost]
-        [Route("{id}/checkout")]
-        public async Task<IActionResult> CheckoutPedido([FromRoute] int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> ObterStatusPedido([FromRoute] int id)
         {
-            var command = new CheckoutPedido(id);
+            var command = new GetStatusPedidoByIdRequest() { PedidoId = id };
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Avança o pedido para o próximo status, quando possível.
+        /// </summary>
+        /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro interno</response>
+        [HttpPost]
+        [Route("{id}/next-status")]
+        public async Task<IActionResult> AtualizaProximoStatus([FromRoute] int id)
+        {
+            var command = new UpdateStatusPedidoRequest() { PedidoId = id };
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Webhook para receber sinalização de pagamento do pedido. Altera o status pedido para RECEBIDO, se o pagamento for aprovado.
+        /// </summary>
+        /// <response code="200">Sucesso</response>
+        /// <response code="500">Erro interno</response>
+        [HttpPost]
+        [Route("/webhook")]
+        public async Task<IActionResult> WebhookPagamento(WebhookPagamentoRequest request)
+        {
+            await _mediator.Send(request);
+            return Ok();
         }
     }
 }

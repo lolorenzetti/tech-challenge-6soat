@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infra.Data.Configuration
 {
@@ -20,6 +15,12 @@ namespace Infra.Data.Configuration
                 .WithMany()
                 .HasForeignKey(c => c.ClienteId)
                 .IsRequired(false);
+
+            builder
+                .HasOne<Pagamento>(e => e.Pagamento)
+                .WithOne()
+                .HasForeignKey<Pagamento>(e => e.PedidoId)
+                .IsRequired(true);
 
             builder.Property(p => p.Status)
                 .HasColumnType("int")

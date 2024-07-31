@@ -42,6 +42,33 @@ namespace Infra.Data.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Pagamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("PagamentoExternoId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PedidoId")
+                        .IsUnique();
+
+                    b.ToTable("Pagamentos");
+                });
+
             modelBuilder.Entity("Domain.Entities.Pedido", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +143,15 @@ namespace Infra.Data.Migrations
                     b.ToTable("Produtos");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Pagamento", b =>
+                {
+                    b.HasOne("Domain.Entities.Pedido", null)
+                        .WithOne("Pagamento")
+                        .HasForeignKey("Domain.Entities.Pagamento", "PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Pedido", b =>
                 {
                     b.HasOne("Domain.Entities.Cliente", null)
@@ -141,6 +177,9 @@ namespace Infra.Data.Migrations
             modelBuilder.Entity("Domain.Entities.Pedido", b =>
                 {
                     b.Navigation("Itens");
+
+                    b.Navigation("Pagamento")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,10 @@
-﻿using Application.Features.ProdutoContext;
+﻿using Application.Features.ProdutoContext.Create;
+using Application.Features.ProdutoContext.Delete;
+using Application.Features.ProdutoContext.GetByCategoria;
+using Application.Features.ProdutoContext.GetById;
+using Application.Features.ProdutoContext.Update;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
 
 namespace API.Controllers
 {
@@ -31,7 +33,7 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> ObterPorId([FromRoute] int id)
         {
-            RequestProdutoById command = new() { Id = id };
+            GetProdutoByIdRequest command = new() { Id = id };
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -51,7 +53,7 @@ namespace API.Controllers
         [Route("categoria/{id}")]
         public async Task<IActionResult> ObterPorCategoria([FromRoute] int id)
         {
-            RequestProdutoByCategoria command = new() { CategoriaId = id };
+            GetProdutoByCategoriaRequest command = new() { CategoriaId = id };
             var result = await _mediator.Send(command);
 
             return Ok(result);
@@ -73,7 +75,7 @@ namespace API.Controllers
         /// <response code="400">Erros de validação</response>
         /// <response code="500">Erro no servidor</response>
         [HttpPost]
-        public async Task<IActionResult> Adicionar([FromBody] CreateProduto command)
+        public async Task<IActionResult> Adicionar([FromBody] CreateProdutoRequest command)
         {
             var id = await _mediator.Send(command);
             return Created($"api/produtos/{id}", id);
@@ -90,7 +92,7 @@ namespace API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Deletar([FromRoute] int id)
         {
-            DeleteProduto command = new() { Id = id };
+            DeleteProdutoRequest command = new() { Id = id };
             await _mediator.Send(command);
             return NoContent();
         }
@@ -100,14 +102,14 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Atualiza um produto existente</remarks>
         /// <param name="command">dados do produto atualizado</param>
-        /// <response code="204">Sucesso</response>
+        /// <response code="200">Sucesso</response>
         /// <response code="400">Erro de validação</response>
         /// <response code="500">Erro no servidor</response>
         [HttpPut]
-        public async Task<IActionResult> Atualizar(UpdateProduto command)
+        public async Task<IActionResult> Atualizar(UpdateProdutoRequest command)
         {
-            await _mediator.Send(command);
-            return NoContent();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }
