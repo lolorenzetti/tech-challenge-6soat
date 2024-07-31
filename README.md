@@ -63,4 +63,18 @@ A API estará disponível em [`http://localhost:9101/swagger/index.html`](http:/
 
 ---
 
+## Fase 2
+
+1. Diagrama da arquitetura em kubernetes.
+
+![Texto Alternativo](https://raw.githubusercontent.com/lolorenzetti/first-tech-challenge/main/Diagrama.png)
+
+2. Video
+
+[Video com explicação do projeto e arquitetura em kubernetes implementada.](https://youtu.be/CKT5Zn2f8B0)
+
+---
+
 Este README fornece uma visão geral do projeto, incluindo a descrição das funcionalidades, a arquitetura utilizada, as tecnologias envolvidas e instruções detalhadas para clonar e executar o projeto usando Docker Compose.
+
+
