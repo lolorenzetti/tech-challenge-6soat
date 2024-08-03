@@ -54,11 +54,7 @@ A arquitetura utilizada é a **Clean Architecture**, e foi implementada as segui
 
 ![Texto Alternativo](https://raw.githubusercontent.com/lolorenzetti/first-tech-challenge/main/Diagrama.png)
 
-
-### Collection (postman) com as API's:
-- Download da [Collection do postman](postman_collection.json)
-
-### Vídeo demonstrativo da arquitetura:
+## Vídeo demonstrativo da arquitetura:
 - Vídeo demonstrando a execução da infrastrutura kubernetes em execução:
 [Veja no youtube](https://youtu.be/CKT5Zn2f8B0)
 
@@ -93,7 +89,7 @@ Este comando irá construir as imagens e iniciar os contêineres definidos no ar
 A API estará disponível em [`http://localhost:9101/swagger/index.html`](http://localhost:9101/swagger/index.html)
 
 
-### Guia de execução API:
+## Guia de execução API:
 
 Os passos para a execução da nossa aplicação se resumem a:
 - Criar um usuário
@@ -102,6 +98,7 @@ Os passos para a execução da nossa aplicação se resumem a:
 - Receber webhook de pagamento aprovado (Pagamento fake)
 - Consultar ou avançar status do pedido
 
+Você pode ver a [collection do postman](postman_collection.json) aqui.
 
 <br/>
 
