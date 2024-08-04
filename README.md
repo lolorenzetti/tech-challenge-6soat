@@ -220,7 +220,4 @@ Os pedidos já finalizado ou que ainda não foram recebidos, não aparecem na li
 <br>
 
 ---
-
 Este README fornece uma visão geral do projeto, incluindo a descrição das funcionalidades, a arquitetura utilizada, as tecnologias envolvidas, instruções detalhadas para clonar e executar o projeto usando Docker Compose e demais instruções necessárias.
-
-
